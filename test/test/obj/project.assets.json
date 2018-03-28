@@ -25576,11 +25576,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Link_\\source\\repos\\test\\test\\test.csproj",
+      "projectUniqueName": "C:\\Users\\Link_\\Documents\\GitHub\\QBTrainer\\test\\test\\test.csproj",
       "projectName": "test",
-      "projectPath": "C:\\Users\\Link_\\source\\repos\\test\\test\\test.csproj",
+      "projectPath": "C:\\Users\\Link_\\Documents\\GitHub\\QBTrainer\\test\\test\\test.csproj",
       "packagesPath": "C:\\Users\\Link_\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Link_\\source\\repos\\test\\test\\obj\\",
+      "outputPath": "C:\\Users\\Link_\\Documents\\GitHub\\QBTrainer\\test\\test\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [

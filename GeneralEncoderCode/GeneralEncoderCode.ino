@@ -7,8 +7,8 @@
 */
 
 int val;
-int encoder0PinA = 12;
-int encoder0PinB = 13;
+int encoder0PinA = 7;
+int encoder0PinB = 6;
 int encoder0Pos = 0;
 int encoder0PinALast = LOW;
 int n = LOW;
@@ -27,7 +27,7 @@ void loop() {
     } else {
       encoder0Pos++;
     }
-    Serial.print (encoder0Pos);
+    Serial.print (encoder0Pos/180);
     Serial.print ("\n");
   }
   encoder0PinALast = n;

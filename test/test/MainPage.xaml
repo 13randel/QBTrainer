@@ -39,6 +39,8 @@
                 <Run Text="QB TRAINER" FontWeight="Bold" FontSize="75"/>
             </Paragraph>
         </RichTextBlock>
+        <RichTextBlockOverflow/>
+        <ScrollBar/>
 
     </Grid>
 </Page>

@@ -1,12 +1,11 @@
-#include <FastLED.h>
 #include <RoboClaw.h>
 
 #include <SoftwareSerial.h>
 
-//#include "FastLED.h"
+#include "FastLED.h"
 
 #define NUM_STRIPS 1
-#define NUM_LEDS_PER_STRIP 100
+#define NUM_LEDS_PER_STRIP 50
 CRGB leds[NUM_LEDS_PER_STRIP];
 
 // For mirroring strips, all the "special" stuff happens just in setup.  We
@@ -45,6 +44,7 @@ void LEDON()
 
 void MotorSTART(int timeDelay, int motorSpeed)
 {
+  
       roboclaw.ForwardM1(address, motorSpeed);
       digitalWrite(LED_BUILTIN, HIGH);
       delay(timeDelay);
@@ -54,7 +54,7 @@ void MotorSTART(int timeDelay, int motorSpeed)
 
 void setup() {
   // tell FastLED there's 60 NEOPIXEL leds on pin 8
-  FastLED.addLeds<WS2811, 8, RGB>(leds, NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<WS2811, 5, RGB>(leds, NUM_LEDS_PER_STRIP);
   pinMode(LED_BUILTIN, OUTPUT);
   // put your setup code here, to run once:
   pinMode (StartSw, INPUT);
@@ -70,22 +70,21 @@ void setup() {
   //Open roboclaw serial ports
   
   roboclaw.begin(38400);
-  LEDON();
+  
 }
 void loop() {
   if (Serial.available())
   {
-    i = digitalRead(ButtonA);
-    j = digitalRead(ButtonB);
+    //i = digitalRead(ButtonA);
+    //j = digitalRead(ButtonB);
 
     char ch = (char)Serial.read();
     Serial.write(ch);
     Serial.write("\n");
-    if (ch == 's'|| i)
+    if (ch == 's')
     {
-      LEDON();
       int size = Serial.available();
-      Serial.flush(); 
+      //Serial.flush(); 
       
       //Get Motor speed 
       char inputBuffer[10] = "";
@@ -99,6 +98,7 @@ void loop() {
       Serial.write("\n");
       
       inputString = "";
+      //inputBuffer = "";
       Serial.readBytesUntil('l', inputBuffer, 6);
       for(int k=0; k<6; k++){
       inputString += inputBuffer[k];
@@ -108,29 +108,48 @@ void loop() {
       Serial.write("\n");
 
       inputString = "";
-      Serial.readBytesUntil('e', inputBuffer, 6);
-      for(int k=0; k<6; k++){
+      //inputBuffer = "";
+      Serial.readBytesUntil('e', inputBuffer, 3);
+      for(int k=0; k<3; k++){
       inputString += inputBuffer[k];
       }
       int LEDDelay = inputString.toInt();
       Serial.println("LED Delay:" + inputString);
       Serial.write("\n");
+      LEDON();
+      //LEDSTART(15);
+      for(int i = NUM_LEDS_PER_STRIP-1; i >= 0; i--) {
       
-      LEDSTART(LEDDelay);
-      MotorSTART(motordelay, motorspeed);
+      leds[i] = CRGB::Black;
+      delay(50);
+      FastLED.show();
     }
-    else if(j == 1)
-    {
-      MotorSTART(motordelay, motorspeed);
-      Serial.println(motordelay);
-      Serial.println(motorspeed);
-       
-    }
-    else if(j == 0 && i == 1)
-    {
+    Serial.write("done");
+      roboclaw.ForwardM1(address, motorspeed);
+      digitalWrite(LED_BUILTIN, HIGH);
+      delay(motordelay);
+      digitalWrite(LED_BUILTIN, LOW);
       roboclaw.ForwardM1(address, 0);
+      Serial.write("done2");
+      //MotorSTART(motordelay, motorspeed);
     }
-
+    else if (ch == 'r')
+    {
+      for(int i = 0; i < NUM_LEDS_PER_STRIP; i++) {
+      leds[i] = CRGB::White;
+      FastLED.show();
+      }
+      Serial.write("ON");
+    }
+    else if (ch == 'o')
+    {
+      for(int i = 0; i < 50; i++) {
+      leds[i] = CRGB::Black;
+      FastLED.show();
+      }
+      Serial.write("OFF");
+    }
+    ch = ' ';
   }
 
 

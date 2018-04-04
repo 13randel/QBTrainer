@@ -2,3 +2,9 @@ C:\Users\Mr\Desktop\RoboclawClassLib\RoboclawClassLib\bin\x86\Debug\RoboclawClas
 C:\Users\Mr\Desktop\RoboclawClassLib\RoboclawClassLib\bin\x86\Debug\RoboclawClassLib.pdb
 C:\Users\Mr\Desktop\RoboclawClassLib\RoboclawClassLib\obj\x86\Debug\RoboclawClassLib.dll
 C:\Users\Mr\Desktop\RoboclawClassLib\RoboclawClassLib\obj\x86\Debug\RoboclawClassLib.pdb
+C:\Users\Link_\Documents\GitHub\QBTrainer\test\RoboclawClassLib\RoboclawClassLib\RoboclawClassLib\bin\x86\Debug\RoboclawClassLib.dll
+C:\Users\Link_\Documents\GitHub\QBTrainer\test\RoboclawClassLib\RoboclawClassLib\RoboclawClassLib\bin\x86\Debug\RoboclawClassLib.pdb
+C:\Users\Link_\Documents\GitHub\QBTrainer\test\RoboclawClassLib\RoboclawClassLib\RoboclawClassLib\obj\x86\Debug\RoboclawClassLib.csprojResolveAssemblyReference.cache
+C:\Users\Link_\Documents\GitHub\QBTrainer\test\RoboclawClassLib\RoboclawClassLib\RoboclawClassLib\obj\x86\Debug\RoboclawClassLib.csproj.CoreCompileInputs.cache
+C:\Users\Link_\Documents\GitHub\QBTrainer\test\RoboclawClassLib\RoboclawClassLib\RoboclawClassLib\obj\x86\Debug\RoboclawClassLib.dll
+C:\Users\Link_\Documents\GitHub\QBTrainer\test\RoboclawClassLib\RoboclawClassLib\RoboclawClassLib\obj\x86\Debug\RoboclawClassLib.pdb

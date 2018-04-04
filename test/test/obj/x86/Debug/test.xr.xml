@@ -43,6 +43,8 @@
       <RootProperty Name="Foreground" />
       <RootProperty Name="Blocks" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.RichTextBlockOverflow" />
+    <RootType FullName="Windows.UI.Xaml.Controls.Primitives.ScrollBar" />
     <RootType FullName="Windows.UI.Xaml.Documents.Paragraph">
       <RootProperty Name="Inlines" />
     </RootType>

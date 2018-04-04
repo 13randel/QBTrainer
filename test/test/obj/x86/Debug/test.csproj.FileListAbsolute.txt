@@ -426,3 +426,5 @@ C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\obj\x86\Debug\qualifiers.txt
 C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\obj\x86\Debug\qualifiers.txt.intermediate
 C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\obj\x86\Debug\MultipleQualifiersPerDimensionFound.txt
 C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\obj\x86\Debug\ProjectArchitectures.txt
+C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\x86\Debug\Core\ForBundle\AppxManifest.xml
+C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\obj\x86\Debug\test.csprojResolveAssemblyReference.cache

@@ -1,0 +1,2 @@
+C:\Users\Link_\Documents\GitHub\QBTrainer\test\RoboclawClassLibUWP\obj\x86\Debug\RoboclawClassLibUWP.csprojResolveAssemblyReference.cache
+C:\Users\Link_\Documents\GitHub\QBTrainer\test\RoboclawClassLibUWP\obj\x86\Debug\RoboclawClassLibUWP.csproj.CoreCompileInputs.cache

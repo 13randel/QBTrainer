@@ -23,6 +23,7 @@
             <TextBlock HorizontalAlignment="Left" Margin="25,50,0,0" Text="Enter 40 Yard dash time (seconds)" TextWrapping="Wrap" VerticalAlignment="Top" SelectionChanged="TextBlock_SelectionChanged"/>
             <TextBlock x:Name="SpeedError" HorizontalAlignment="Left" Margin="214,13,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FFC50000"/>
             <TextBlock x:Name="MPH" HorizontalAlignment="Left" Margin="269,81,0,-51" Text="" TextWrapping="Wrap" VerticalAlignment="Top" SelectionChanged="TextBlock_SelectionChanged" Width="57"/>
+            <TextBlock x:Name="QPPS" HorizontalAlignment="Left" Margin="137,100,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top"/>
 
         </Grid>
         <RichTextBlock x:Name="Title" Height="100" VerticalAlignment="Top" Margin="175,0,175,0" Foreground="White">

@@ -27,10 +27,7 @@ namespace test
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public MainPage()
-        {
-            this.InitializeComponent();
-        }
+        public MainPage() => this.InitializeComponent();
 
 
         private async void ConnectToSerialPort(string message)
@@ -44,7 +41,7 @@ namespace test
                 DeviceInformation deviceInfo = devices[0];
                 SerialDevice serialDevice = await SerialDevice.FromIdAsync(deviceInfo.Id);
                 Debug.WriteLine(serialDevice);
-                serialDevice.BaudRate = 57600;
+                serialDevice.BaudRate = 9600;
                 serialDevice.DataBits = 8;
                 serialDevice.StopBits = SerialStopBitCount.Two;
                 serialDevice.Parity = SerialParity.None;
@@ -64,7 +61,7 @@ namespace test
             }
         }
 
-        private double fortyYdToMPH(double seconds)
+        private double FortyYdToMPH(double seconds)
         {
             int yardsPerMile = 1760;
             return ((40 / seconds) * 3600) / yardsPerMile;
@@ -76,7 +73,7 @@ namespace test
             return (mph / 32.1) * topSpeed;
         }
 
-        private async void err(string message)
+        private async void Err(string message)
         {
             MessageDialog popup = new MessageDialog(message);
             await popup.ShowAsync();
@@ -90,21 +87,23 @@ namespace test
                 seconds = Convert.ToDouble(Speed.Text.ToString());
             } catch (FormatException)
             {
-                err("40 yard dash time must be a number.");
+                Err("40 yard dash time must be a number.");
                 Speed.Text = "";
                 MPH.Text = "";
             }
 
             if (seconds <= 0)
             {
-                err("40 yard dash time must be greater than zero.");
+                Err("40 yard dash time must be greater than zero.");
                 Speed.Text = "";
                 MPH.Text = "";
             } else
             {
-                double mph = fortyYdToMPH(seconds);
+                double mph = FortyYdToMPH(seconds);
 
                 int qpps = Convert.ToInt32(MPHToQPPS(mph));
+
+                QPPS.Text = qpps.ToString();
 
                 ConnectToSerialPort(qpps.ToString() + "|");
             }
@@ -123,8 +122,8 @@ namespace test
                 seconds = Convert.ToDouble(Speed.Text.ToString());
                 if (seconds > 0.0)
                 {
-                    double mph = fortyYdToMPH(seconds);
-                    mph = Math.Round(mph, 2);
+                    double mph = FortyYdToMPH(seconds);
+                    mph = Math.Round(mph, 3);
                     MPH.Text = mph.ToString() + " mph";
                 }
                 else { MPH.Text = ""; }

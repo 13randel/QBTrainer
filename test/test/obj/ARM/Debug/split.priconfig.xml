@@ -6,7 +6,7 @@
     <autoResourcePackage qualifier="DXFeatureLevel" />
     <omitSchemaFromResourcePacks />
   </packaging>
-  <index root="\" startIndexAt="C:\Users\Joshu\Documents\GitHub\QBTrainer-master\test\test\bin\ARM\Debug\resources.pri">
+  <index root="\" startIndexAt="C:\Users\Joshu\Documents\GitHub\QBTrainer\test\test\bin\ARM\Debug\resources.pri">
     <default>
       <qualifier name="Language" value="en-US" />
       <qualifier name="Contrast" value="standard" />

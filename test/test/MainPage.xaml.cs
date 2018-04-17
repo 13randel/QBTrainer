@@ -64,39 +64,80 @@ namespace test
             }
         }
 
+        private double fortyYdToMPH(double seconds)
+        {
+            int yardsPerMile = 1760;
+            return ((40 / seconds) * 3600) / yardsPerMile;
+        }
+
+        private double MPHToQPPS(double mph)
+        {
+            double topSpeed = 45000;
+            return (mph / 32.1) * topSpeed;
+        }
+
+        private async void err(string message)
+        {
+            MessageDialog popup = new MessageDialog(message);
+            await popup.ShowAsync();
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            int speed = Convert.ToInt32(Speed.Text.ToString());
-            if(speed > 127)
+            double seconds = -1.0;
+            try
             {
-                SpeedError.Text = "Speed cannot be greater than 127";
-                Speed.Text = "127";
-                speed = 127;
-            }
-            else if(speed < 0)
+                seconds = Convert.ToDouble(Speed.Text.ToString());
+            } catch (FormatException)
             {
-                SpeedError.Text = "Speed cannot be less than 0";
-                Speed.Text = "0";
-                speed = 0;
-            }
-            else
-            {
-                SpeedError.Text = "";
+                err("40 yard dash time must be a number.");
+                Speed.Text = "";
+                MPH.Text = "";
             }
 
-            if (Reverse.IsChecked == true)
+            if (seconds <= 0)
             {
-                ConnectToSerialPort("s" + (-1*speed).ToString() + "m" + MotorDelay.ToString() + "l" + LEDDelay.ToString() + "e");
-            }
-            else
+                err("40 yard dash time must be greater than zero.");
+                Speed.Text = "";
+                MPH.Text = "";
+            } else
             {
-                ConnectToSerialPort("s" + speed.ToString() + "m" + MotorDelay.Text.ToString() + "l" + LEDDelay.Text.ToString() + "e");
+                double mph = fortyYdToMPH(seconds);
+
+                int qpps = Convert.ToInt32(MPHToQPPS(mph));
+
+                ConnectToSerialPort(qpps.ToString() + "|");
             }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            ConnectToSerialPort("s0m0l0e");
+            ConnectToSerialPort("0");
+        }
+
+        private void Speed_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            double seconds = -1.0;
+            try
+            {
+                seconds = Convert.ToDouble(Speed.Text.ToString());
+                if (seconds > 0.0)
+                {
+                    double mph = fortyYdToMPH(seconds);
+                    mph = Math.Round(mph, 2);
+                    MPH.Text = mph.ToString() + " mph";
+                }
+                else { MPH.Text = ""; }
+            }
+            catch (FormatException)
+            {
+                MPH.Text = "";
+            }
+        }
+
+        private void TextBlock_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

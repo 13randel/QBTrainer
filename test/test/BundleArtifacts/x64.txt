@@ -1,2 +1,2 @@
-MainPackage=C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\x64\Debug\test_1.0.6.0_x64_Debug.appx
-SymbolPackage=C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\AppPackages\test_1.0.6.0_Debug_Test\test_1.0.6.0_x64_Debug.appxsym
+MainPackage=C:\Users\Joshu\Documents\GitHub\QBTrainer-master\test\test\bin\x64\Debug\test_1.0.7.0_x64_Debug.appx
+SymbolPackage=C:\Users\Joshu\Documents\GitHub\QBTrainer-master\test\test\AppPackages\test_1.0.7.0_Debug_Test\test_1.0.7.0_x64_Debug.appxsym

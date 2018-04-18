@@ -38,42 +38,42 @@ int readSpeedToUnits() {
   return speed;
 }
 
-int dst_speed = 0;
-int speed = 0;
-int accel = 30;
+unsigned int dst_speed = 0;
+unsigned int speed = 0;
+unsigned int accel = 30;
 
-int getAccel(int curSpeed) {
-  if (curSpeed < 10)
-    return 32;
-  else if (curSpeed < 25)
-    return 24;
-  else if (curSpeed < 50)
-    return 16;
-  else if (curSpeed < 80)
-    return 4;
-  else return 1 ;
+int getAccel() {
+  float ratio = (float)speed / (float)dst_speed;
+  if (ratio < 0.5)
+    return 25;
+  else if (ratio < 0.8)
+    return 8;
+  else return 2;
 }
 
 void loop() {
-  int input = (int)Serial.read();
-  if(input != 0){
-  dst_speed = input;//(int)Serial.read();
-  Serial.println(input);
-  input = 0;
+  Serial.println(accel);
+  char buff[32] = { 0 };
+  int n_bytes = (int)Serial.readBytesUntil('|', buff, 32);
+  if (n_bytes > 0){
+    String s(buff);
+    dst_speed = s.toInt();
+    Serial.println(dst_speed);
   }
  
-    unsigned long t = millis();
+    // unsigned long t = millis();
     int currentSpeed = readSpeedToUnits();
-    uint8_t status;
-    bool valid;
-    //Serial.println(abs(roboclaw.ReadSpeedM1(address, &status, &valid)));
     if (currentSpeed < dst_speed) {
       roboclaw.ForwardM1(address, speed);
-      while (millis() - t < 250);
-      if (speed >= 123)
+      // while (millis() - t < 100);
+      if ((int)speed + accel > 127) {
         speed = 127;
-      else if(speed <= dst_speed)
-        speed += accel > 4 ? accel / 4 : 1;  
+      } else {
+        speed += accel;
+      }  
+    } else if (currentSpeed > dst_speed) {
+      speed = dst_speed;
+      roboclaw.ForwardM1(address, speed);
     }
-    accel = getAccel(speed);
+    accel = getAccel();
 }

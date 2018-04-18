@@ -19,7 +19,7 @@
 
         <Grid HorizontalAlignment="Left" Height="150" Margin="216,165,0,0" VerticalAlignment="Top" Width="350" Background="White">
             <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" Text="MOTOR" TextWrapping="Wrap" VerticalAlignment="Top"/>
-            <TextBox x:Name="Speed" HorizontalAlignment="Left" Margin="265,44,0,0" Text="" VerticalAlignment="Top" Width="54" TextChanged="Speed_TextChanged"/>
+            <TextBox x:Name="Speed" InputScope="Number" HorizontalAlignment="Left" Margin="265,44,0,0" Text="" VerticalAlignment="Top" Width="54" TextChanged="Speed_TextChanged"/>
             <TextBlock HorizontalAlignment="Left" Margin="25,50,0,0" Text="Enter 40 Yard dash time (seconds)" TextWrapping="Wrap" VerticalAlignment="Top" SelectionChanged="TextBlock_SelectionChanged"/>
             <TextBlock x:Name="SpeedError" HorizontalAlignment="Left" Margin="214,13,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FFC50000"/>
             <TextBlock x:Name="MPH" HorizontalAlignment="Left" Margin="269,81,0,-51" Text="" TextWrapping="Wrap" VerticalAlignment="Top" SelectionChanged="TextBlock_SelectionChanged" Width="57"/>

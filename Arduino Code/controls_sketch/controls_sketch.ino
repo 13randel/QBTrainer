@@ -27,33 +27,6 @@ void setup() {
     roboclaw.begin(38400);
     roboclaw.ForwardM1(address, 0);
 }
- 
-void displayspeed(void) {
-    uint8_t status;
-    bool valid;
- 
-    long enc1= roboclaw.ReadEncM1(address, &status, &valid);
-    if(valid){
-        Serial.print("Encoder1:");
-        Serial.print(enc1,DEC);
-        Serial.print(" ");
-    }
-    
-    long speed1 = roboclaw.ReadSpeedM1(address, &status, &valid);
-    // filter the speed. You'll need to run the motors for a bit
-    // in order to get the filtered values to 'settle down'
-    // after about 20 seconds of my motors at full speed I got
-    // converged results.
-    avgSpeedM1 = avgSpeedM1 * (1-alpha) + speed1 * alpha;
- 
-    if(valid){
-        Serial.print("Avg Speed1:");
-        Serial.print(avgSpeedM1,DEC);
-        Serial.print(" ");
-    }
- 
-    Serial.println();
-}
 
 int readSpeedToUnits() {
   uint8_t status = 0;
@@ -65,7 +38,7 @@ int readSpeedToUnits() {
   return speed;
 }
 
-int dst_speed = 0;
+int dst_speed = 50;
 int speed = 0;
 int accel = 30;
 

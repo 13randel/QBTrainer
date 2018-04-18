@@ -1,1 +1,1 @@
-C:\Users\Joshu\Documents\GitHub\QBTrainer-master\test\test\test.csproj;x86
+C:\Users\Joshu\Documents\GitHub\QBTrainer\test\test\test.csproj;x86

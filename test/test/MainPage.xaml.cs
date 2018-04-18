@@ -41,7 +41,7 @@ namespace test
                 DeviceInformation deviceInfo = devices[0];
                 SerialDevice serialDevice = await SerialDevice.FromIdAsync(deviceInfo.Id);
                 Debug.WriteLine(serialDevice);
-                serialDevice.BaudRate = 9600;
+                serialDevice.BaudRate = 57600;
                 serialDevice.DataBits = 8;
                 serialDevice.StopBits = SerialStopBitCount.Two;
                 serialDevice.Parity = SerialParity.None;
@@ -67,9 +67,9 @@ namespace test
             return ((40 / seconds) * 3600) / yardsPerMile;
         }
 
-        private double MPHToQPPS(double mph)
+        private double MPHToUnits(double mph)
         {
-            double topSpeed = 45000;
+            double topSpeed = 127;
             return (mph / 32.1) * topSpeed;
         }
 
@@ -101,11 +101,11 @@ namespace test
             {
                 double mph = FortyYdToMPH(seconds);
 
-                int qpps = Convert.ToInt32(MPHToQPPS(mph));
+                int units = Convert.ToInt32(MPHToUnits(mph));
 
-                QPPS.Text = qpps.ToString();
+                QPPS.Text = units.ToString();
 
-                ConnectToSerialPort(qpps.ToString() + "|");
+                ConnectToSerialPort(units.ToString() + "|");
             }
         }
 

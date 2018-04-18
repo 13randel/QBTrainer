@@ -23,7 +23,7 @@ void setup() {
     
     //roboclaw.SetM1VelocityPID(address,Kd,Kp,Ki,qpps);
     roboclaw.ResetEncoders(address);
-    
+    while( !Serial) ;
     roboclaw.begin(38400);
     roboclaw.ForwardM1(address, 0);
 }
@@ -38,28 +38,35 @@ int readSpeedToUnits() {
   return speed;
 }
 
-int dst_speed = 50;
+int dst_speed = 0;
 int speed = 0;
 int accel = 30;
 
 int getAccel(int curSpeed) {
   if (curSpeed < 10)
-    return 24;
+    return 32;
   else if (curSpeed < 25)
-    return 20;
+    return 24;
   else if (curSpeed < 50)
-    return 12;
+    return 16;
   else if (curSpeed < 80)
     return 4;
   else return 1 ;
 }
 
 void loop() {
+  int input = (int)Serial.read();
+  if(input != 0){
+  dst_speed = input;//(int)Serial.read();
+  Serial.println(input);
+  input = 0;
+  }
+ 
     unsigned long t = millis();
     int currentSpeed = readSpeedToUnits();
     uint8_t status;
     bool valid;
-    Serial.println(abs(roboclaw.ReadSpeedM1(address, &status, &valid)));
+    //Serial.println(abs(roboclaw.ReadSpeedM1(address, &status, &valid)));
     if (currentSpeed < dst_speed) {
       roboclaw.ForwardM1(address, speed);
       while (millis() - t < 250);

@@ -10,7 +10,7 @@
     <PackageArchitecture>x86</PackageArchitecture>
     <PackageIdentityName>f2dd9f6c-ce92-41be-9947-5d6645431595</PackageIdentityName>
     <PackageIdentityPublisher>CN=Link_</PackageIdentityPublisher>
-    <IntermediateOutputPath>C:\Users\Link_\source\repos\test\test\obj\x86\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\obj\x86\Debug\</IntermediateOutputPath>
     <RemoteDeploymentType>
     </RemoteDeploymentType>
     <PackageRegistrationPath>
@@ -18,26 +18,26 @@
     <RemoveNonLayoutFiles>true</RemoveNonLayoutFiles>
     <DeployOptionalPackages>false</DeployOptionalPackages>
     <WindowsSdkPath>C:\Program Files %28x86%29\Windows Kits\10\</WindowsSdkPath>
-    <LayoutDir>C:\Users\Link_\source\repos\test\test\bin\x86\Debug\AppX</LayoutDir>
-    <RegisteredManifestChecksum>48D60EF855BF611D4F861BEF519830508A3B5FD104C6192E7A54750EE46080F0</RegisteredManifestChecksum>
-    <RegisteredPackageMoniker>f2dd9f6c-ce92-41be-9947-5d6645431595_1.0.5.0_x86__q5pdg7jqwwj4w</RegisteredPackageMoniker>
+    <LayoutDir>C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\x86\Debug\AppX</LayoutDir>
+    <RegisteredManifestChecksum>E9B7396C1514D2E25EC0D279413C5581461FBB26A21E1282067A9C12D563CFBC</RegisteredManifestChecksum>
+    <RegisteredPackageMoniker>f2dd9f6c-ce92-41be-9947-5d6645431595_1.0.38.0_x86__q5pdg7jqwwj4w</RegisteredPackageMoniker>
     <RegisteredUserModeAppID>f2dd9f6c-ce92-41be-9947-5d6645431595_q5pdg7jqwwj4w!App</RegisteredUserModeAppID>
     <RegisteredPackageID>f2dd9f6c-ce92-41be-9947-5d6645431595</RegisteredPackageID>
     <RegisteredPackagePublisher>CN=Link_</RegisteredPackagePublisher>
-    <RegisteredVersion>1.0.5.0</RegisteredVersion>
+    <RegisteredVersion>1.0.38.0</RegisteredVersion>
     <JitOptimizationSuppressed>True</JitOptimizationSuppressed>
   </PropertyGroup>
   <ItemGroup>
-    <AppXManifest Include="C:\Users\Link_\source\repos\test\test\bin\x86\Debug\Core\AppxManifest.xml">
+    <AppXManifest Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\x86\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2018-03-21T20:40:14.066</Modified>
+      <Modified>2018-04-19T17:41:50.544</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
-    <AppxPackagedFile Include="C:\Users\Link_\source\repos\test\test\bin\x86\Debug\test.exe">
+    <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\x86\Debug\test.exe">
       <PackagePath>entrypoint\test.exe</PackagePath>
-      <Modified>2018-03-21T20:40:13.232</Modified>
+      <Modified>2018-04-19T17:41:50.151</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Microsoft SDKs\NuGetPackages\microsoft.csharp\4.0.1\lib\netcore50\Microsoft.CSharp.dll">
       <PackagePath>Microsoft.CSharp.dll</PackagePath>
@@ -495,60 +495,60 @@
       <PackagePath>System.Xml.XmlSerializer.dll</PackagePath>
       <Modified>2016-06-12T03:15:04.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Link_\source\repos\test\test\Properties\Default.rd.xml">
+    <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\Properties\Default.rd.xml">
       <PackagePath>Properties\Default.rd.xml</PackagePath>
-      <Modified>2018-03-19T01:17:09.314</Modified>
+      <Modified>2018-04-19T06:02:17.025</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Link_\source\repos\test\test\Assets\LockScreenLogo.scale-200.png">
+    <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\Assets\LockScreenLogo.scale-200.png">
       <PackagePath>Assets\LockScreenLogo.scale-200.png</PackagePath>
-      <Modified>2018-03-06T19:10:27.957</Modified>
+      <Modified>2018-04-19T06:02:17.011</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Link_\source\repos\test\test\Assets\SplashScreen.scale-200.png">
+    <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\Assets\SplashScreen.scale-200.png">
       <PackagePath>Assets\SplashScreen.scale-200.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2018-03-06T19:10:27.957</Modified>
+      <Modified>2018-04-19T06:02:17.012</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Link_\source\repos\test\test\Assets\Square150x150Logo.scale-200.png">
+    <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\Assets\Square150x150Logo.scale-200.png">
       <PackagePath>Assets\Square150x150Logo.scale-200.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2018-03-06T19:10:27.957</Modified>
+      <Modified>2018-04-19T06:02:17.013</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Link_\source\repos\test\test\Assets\Square44x44Logo.scale-200.png">
+    <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\Assets\Square44x44Logo.scale-200.png">
       <PackagePath>Assets\Square44x44Logo.scale-200.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2018-03-06T19:10:27.957</Modified>
+      <Modified>2018-04-19T06:02:17.014</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Link_\source\repos\test\test\Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
+    <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
       <PackagePath>Assets\Square44x44Logo.targetsize-24_altform-unplated.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2018-03-06T19:10:27.957</Modified>
+      <Modified>2018-04-19T06:02:17.015</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Link_\source\repos\test\test\Assets\StoreLogo.png">
+    <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\Assets\StoreLogo.png">
       <PackagePath>Assets\StoreLogo.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2018-03-06T19:10:27.957</Modified>
+      <Modified>2018-04-19T06:02:17.015</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Link_\source\repos\test\test\Assets\Wide310x150Logo.scale-200.png">
+    <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\Assets\Wide310x150Logo.scale-200.png">
       <PackagePath>Assets\Wide310x150Logo.scale-200.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2018-03-06T19:10:27.957</Modified>
+      <Modified>2018-04-19T06:02:17.016</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Link_\source\repos\test\test\bin\x86\Debug\test.xr.xml">
+    <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\x86\Debug\test.xr.xml">
       <PackagePath>test.xr.xml</PackagePath>
-      <Modified>2018-03-21T17:39:16.819</Modified>
+      <Modified>2018-04-19T17:22:20.312</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Windows Kits\10\UnionMetadata\10.0.16299.0\Windows.winmd">
       <PackagePath>WinMetadata\Windows.winmd</PackagePath>
       <Modified>2017-09-28T22:28:16.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Link_\source\repos\test\test\bin\x86\Debug\resources.pri">
+    <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\x86\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2018-03-21T20:40:13.809</Modified>
+      <Modified>2018-04-19T17:23:05.439</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Link_\source\repos\test\test\bin\x86\Debug\Core\test.exe">
+    <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\x86\Debug\Core\test.exe">
       <PackagePath>test.exe</PackagePath>
-      <Modified>2018-03-21T20:40:14.056</Modified>
+      <Modified>2018-04-19T17:41:50.540</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

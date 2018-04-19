@@ -220,7 +220,6 @@ C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\ARM\Debug\test.pdb
 C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\ARM\Debug\resources.pri
 C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\ARM\Debug\AppxManifest.xml
 C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\ARM\Debug\Core\AppxManifest.xml
-C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\ARM\Debug\Core\ForBundle\AppxManifest.xml
 C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\ARM\Debug\Core\test.exe
 C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\ARM\Debug\test.build.appxrecipe
 C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\ARM\Debug\Microsoft.CSharp.dll

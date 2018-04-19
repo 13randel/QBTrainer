@@ -641,3 +641,4 @@ C:\Users\Joshu\Documents\GitHub\QBTrainer-master\test\test\obj\x86\Debug\qualifi
 C:\Users\Joshu\Documents\GitHub\QBTrainer-master\test\test\obj\x86\Debug\qualifiers.txt.intermediate
 C:\Users\Joshu\Documents\GitHub\QBTrainer-master\test\test\obj\x86\Debug\MultipleQualifiersPerDimensionFound.txt
 C:\Users\Joshu\Documents\GitHub\QBTrainer-master\test\test\obj\x86\Debug\ProjectArchitectures.txt
+C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\obj\x86\Debug\test.csprojResolveAssemblyReference.cache

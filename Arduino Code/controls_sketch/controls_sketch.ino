@@ -3,26 +3,16 @@
  
 // Roboclaw is set to Serial Packet Mode
 #define address 0x80
-#define Kp 1.0
-#define Ki 0.5
-#define Kd 0.25
-#define qpps 44000
-      // this is usb cable from Arduino to computer
+// this is usb cable from Arduino to computer
 SoftwareSerial serial(10,11);
 //SoftwareSerial serial2(0,1);
 RoboClaw roboclaw(&serial, 10000);    // serial connection to RoboClaw
-long avgSpeedM1, avgSpeedM2;
-// alpha is used to filter the results
-float alpha = .10; // .1 = data smoothing single pole filter setting.
 unsigned int motorspeed = 0;
 
 void setup() {
     Serial.begin(57600);
-    // Serial.begin(9600);
-
-    
-    //roboclaw.SetM1VelocityPID(address,Kd,Kp,Ki,qpps);
     roboclaw.ResetEncoders(address);
+    
     while( !Serial) ;
     roboclaw.begin(38400);
     roboclaw.ForwardM1(address, 0);

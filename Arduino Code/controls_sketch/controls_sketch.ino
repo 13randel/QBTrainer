@@ -28,11 +28,14 @@ void setup() {
     roboclaw.ForwardM1(address, 0);
 }
 
+// read qpps from the encoder and translate that to a value between 0 and 127
 int readSpeedToUnits() {
   uint8_t status = 0;
   bool valid = true;
   long speed = abs(roboclaw.ReadSpeedM1(address, &status, &valid));
   speed = ((double)speed / 44000.0) * 127;
+
+  // it's consistently off by a little, so we do some correction
   if (speed >= 3)
     speed += 2;
   return speed;
@@ -42,36 +45,57 @@ unsigned int dst_speed = 0;
 unsigned int speed = 0;
 unsigned int accel = 30;
 
+// time it takes to accelerate to dst_speed -- user set
+float T = 2.0;
+
+// decay rate -- program set
+float k = 0.0;
+
+// time vars -- program set
+unsigned long long start = 0;
+unsigned long long now = 0;
+
+// use increasing exponential growth to calculate the acceleration
 int getAccel() {
-  float ratio = (float)speed / (float)dst_speed;
-  if (ratio < 0.5)
-    return 25;
-  else if (ratio < 0.8)
-    return 8;
-  else return 2;
+  double t = (double)(now - start) / 1000;
+  return (dst_speed * (1 - exp(k*t)) - speed);
 }
 
 void loop() {
-  Serial.println(accel);
-  char buff[32] = { 0 };
-  int n_bytes = (int)Serial.readBytesUntil('|', buff, 32);
-  if (n_bytes > 0){
-    String s(buff);
-    dst_speed = s.toInt();
-    Serial.println(dst_speed);
+  // using Serial.available() makes checking serial so much faster
+  // this is neccessary to make the acceleration smooth
+  if (Serial.available()) {
+    char buff[32] = { 0 };
+    int n_bytes = (int)Serial.readBytesUntil('|', buff, 32);
+    if (n_bytes > 0){
+      String s(buff);
+      dst_speed = s.toInt();
+
+      if (dst_speed) {
+        if (T == 0.0) T = 0.00001;
+        // calculate rate so that we approach dst_speed in T seconds
+        // 0.01 is just a small number so that we don't divide by zero
+        k = -1.0  * log(((float)dst_speed) / 0.01) / T;
+      }
+      
+      start = millis();
+    }
   }
  
-    // unsigned long t = millis();
+    now = millis();
     int currentSpeed = readSpeedToUnits();
     if (currentSpeed < dst_speed) {
       roboclaw.ForwardM1(address, speed);
-      // while (millis() - t < 100);
+
+      // make sure not to overflow
       if ((int)speed + accel > 127) {
         speed = 127;
       } else {
         speed += accel;
-      }  
+      } 
     } else if (currentSpeed > dst_speed) {
+      // decreases in speed should be instant
+      // this helps when we want to stop the motor
       speed = dst_speed;
       roboclaw.ForwardM1(address, speed);
     }

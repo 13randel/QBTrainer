@@ -17,6 +17,7 @@
         <Button x:ConnectionId='1' Content="Start" HorizontalAlignment="Right" Margin="0,0,200,50" VerticalAlignment="Bottom"                      Width="100" Height="30"/>
         <Button x:ConnectionId='2' Content="Stop" HorizontalAlignment="Right" Margin="0,0,50,50" VerticalAlignment="Bottom"                        Width="100" Height="30"/>
 
+<<<<<<< HEAD
         <Grid HorizontalAlignment="Left" Height="150" Margin="30,128,0,0" VerticalAlignment="Top" Width="350" Background="White">
             <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" Text="MOTOR" TextWrapping="Wrap" VerticalAlignment="Top"/>
             <TextBox x:ConnectionId='7' x:Name="Speed" InputScope="Number" HorizontalAlignment="Left" Margin="265,44,0,0" Text="" VerticalAlignment="Top" Width="54"                                />
@@ -24,6 +25,15 @@
             <TextBlock x:ConnectionId='8' x:Name="SpeedError" HorizontalAlignment="Left" Margin="214,13,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FFC50000"/>
             <TextBlock x:ConnectionId='9' x:Name="MPH" HorizontalAlignment="Left" Margin="269,81,0,-51" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="57"/>
             <TextBlock x:ConnectionId='10' x:Name="QPPS" HorizontalAlignment="Left" Margin="137,100,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top"/>
+=======
+        <Grid HorizontalAlignment="Left" Height="150" Margin="216,165,0,0" VerticalAlignment="Top" Width="350" Background="White">
+            <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" Text="MOTOR" TextWrapping="Wrap" VerticalAlignment="Top"/>
+            <TextBox x:ConnectionId='4' x:Name="Speed" InputScope="Number" HorizontalAlignment="Left" Margin="265,44,0,0" Text="" VerticalAlignment="Top" Width="54"                                />
+            <TextBlock x:ConnectionId='5' HorizontalAlignment="Left" Margin="25,50,0,0" Text="Enter 40 Yard dash time (seconds)" TextWrapping="Wrap" VerticalAlignment="Top"                                              />
+            <TextBlock x:ConnectionId='6' x:Name="SpeedError" HorizontalAlignment="Left" Margin="214,13,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FFC50000"/>
+            <TextBlock x:ConnectionId='7' x:Name="MPH" HorizontalAlignment="Left" Margin="269,81,0,-51" Text="" TextWrapping="Wrap" VerticalAlignment="Top"                                               Width="57"/>
+            <TextBlock x:ConnectionId='8' x:Name="QPPS" HorizontalAlignment="Left" Margin="137,100,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top"/>
+>>>>>>> 3350e9620d797f0e2efd0f272f28e72e6e1f38e5
 
         </Grid>
         <RichTextBlock x:ConnectionId='3' x:Name="Title" Height="100" VerticalAlignment="Top" Margin="175,0,175,0" Foreground="White">
@@ -31,6 +41,7 @@
                 <Run Text="QB TRAINER" FontWeight="Bold" FontSize="75"/>
             </Paragraph>
         </RichTextBlock>
+<<<<<<< HEAD
         <Grid Height="150" Margin="0,128,30,0" VerticalAlignment="Top" Background="White" HorizontalAlignment="Right" Width="350">
             <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" Text="LEDS" TextWrapping="Wrap" VerticalAlignment="Top"/>
             <TextBox x:ConnectionId='4' x:Name="Length" InputScope="Number" HorizontalAlignment="Left" Margin="265,44,0,0" Text="" VerticalAlignment="Top" Width="54"                                 />
@@ -43,6 +54,8 @@
             <TextBlock x:ConnectionId='6' x:Name="LEDNUMBER" HorizontalAlignment="Left" Margin="269,81,0,-51" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="57"/>
 
         </Grid>
+=======
+>>>>>>> 3350e9620d797f0e2efd0f272f28e72e6e1f38e5
 
     </Grid>
 </Page>

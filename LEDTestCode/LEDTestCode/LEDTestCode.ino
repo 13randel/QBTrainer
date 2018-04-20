@@ -13,7 +13,7 @@ CRGB leds[NUM_LEDS_PER_STRIP];
 // just addLeds multiple times, once for each strip
 void setup() {
   // tell FastLED there's 60 NEOPIXEL leds on pin 10
-  FastLED.addLeds<WS2811, 8, RGB>(leds, NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<WS2811, 2, RGB>(leds, NUM_LEDS_PER_STRIP);
   Serial.begin(57600);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only

@@ -852,3 +852,4 @@ C:\Users\Joshu\Documents\GitHub\QBTrainer\test\test\obj\ARM\Debug\qualifiers.txt
 C:\Users\Joshu\Documents\GitHub\QBTrainer\test\test\obj\ARM\Debug\MultipleQualifiersPerDimensionFound.txt
 C:\Users\Joshu\Documents\GitHub\QBTrainer\test\test\obj\ARM\Debug\ProjectArchitectures.txt
 C:\Users\Joshu\Documents\GitHub\QBTrainer\test\test\obj\ARM\Debug\test.csprojResolveAssemblyReference.cache
+C:\Users\Joshu\Documents\GitHub\QBTrainer\test\test\bin\ARM\Debug\Core\ForBundle\AppxManifest.xml

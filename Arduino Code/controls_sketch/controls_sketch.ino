@@ -1,5 +1,11 @@
 #include <RoboClaw.h>
 #include <SoftwareSerial.h>
+
+#include "FastLED.h"
+
+#define NUM_STRIPS 1
+#define NUM_LEDS_PER_STRIP 50
+CRGB leds[NUM_STRIPS * NUM_LEDS_PER_STRIP];
  
 // Roboclaw is set to Serial Packet Mode
 #define address 0x80
@@ -14,6 +20,7 @@ void setup() {
     roboclaw.ResetEncoders(address);
     
     while( !Serial) ;
+    FastLED.addLeds<WS2811, 2, RGB>(leds, NUM_LEDS_PER_STRIP * NUM_STRIPS);
     roboclaw.begin(38400);
     roboclaw.ForwardM1(address, 0);
 }
@@ -31,6 +38,7 @@ int readSpeedToUnits() {
   return speed;
 }
 
+unsigned int n_leds = 0;
 unsigned int dst_speed = 0;
 unsigned int speed = 0;
 unsigned int accel = 30;
@@ -44,6 +52,7 @@ float k = 0.0;
 // time vars -- program set
 unsigned long long start = 0;
 unsigned long long now = 0;
+50|30|
 
 // use increasing exponential growth to calculate the acceleration
 int getAccel() {
@@ -51,43 +60,67 @@ int getAccel() {
   return (dst_speed * (1 - exp(k*t)) - speed);
 }
 
+unsigned int readUnsignedUntil(char delim) {
+  char buff[64] = { 0 };
+  int n_bytes = (int)Serial.readBytesUntil(delim, buff, 64);
+  String s(buff);
+  return s.toInt();
+}
+
+void runLEDs() {
+  unsigned int led_per_s = (((double)dst_speed / 127.0) * 300) / 2.5;
+  unsigned int delay_millis = ((double)n_leds / (double)led_per_s) / 1000;
+  for (int i = 0; i >= 500; i += 1) {
+    if (i < n_leds)
+      leds[i] = CRGB::White;
+    else 
+      leds[i] = CRGB::Black;
+    FastLED.show();
+  }
+  for (int i = n_leds - 1; i >= 0; i -= 1) {
+    leds[i] = CRGB::Black;
+    delay(delay_millis);
+    FastLED.show();
+  }
+}
+
 void loop() {
   // using Serial.available() makes checking serial so much faster
   // this is neccessary to make the acceleration smooth
   if (Serial.available()) {
     char buff[32] = { 0 };
-    int n_bytes = (int)Serial.readBytesUntil('|', buff, 32);
-    if (n_bytes > 0){
-      String s(buff);
-      dst_speed = s.toInt();
 
-      if (dst_speed) {
-        if (T == 0.0) T = 0.00001;
-        // calculate rate so that we approach dst_speed in T seconds
-        // 0.01 is just a small number so that we don't divide by zero
-        k = -1.0  * log(((float)dst_speed) / 0.01) / T;
-      }
-      
+    dst_speed = readUnsignedUntil('|');
+    n_leds = readUnsignedUntil('|');
+    
+    if (dst_speed) {
+      if (T == 0.0) T = 0.00001;
+      // calculate rate so that we approach dst_speed in T seconds
+      // 0.01 is just a small number so that we don't divide by zero
+      k = -1.0  * log(((float)dst_speed) / 0.01) / T;
+
+      runLEDs();
+
       start = millis();
     }
   }
- 
-    now = millis();
-    int currentSpeed = readSpeedToUnits();
-    if (currentSpeed < dst_speed) {
-      roboclaw.ForwardM1(address, speed);
 
-      // make sure not to overflow
-      if ((int)speed + accel > 127) {
-        speed = 127;
-      } else {
-        speed += accel;
-      } 
-    } else if (currentSpeed > dst_speed) {
-      // decreases in speed should be instant
-      // this helps when we want to stop the motor
-      speed = dst_speed;
-      roboclaw.ForwardM1(address, speed);
-    }
-    accel = getAccel();
+  now = millis();
+  int currentSpeed = readSpeedToUnits();
+  if (currentSpeed < dst_speed) {
+    roboclaw.ForwardM1(address, speed);
+
+    // make sure not to overflow
+    if ((int)speed + accel > 127) {
+      speed = 127;
+    } else {
+      speed += accel;
+    } 
+  } else if (currentSpeed > dst_speed) {
+    // decreases in speed should be instant
+    // this helps when we want to stop the motor
+    speed = dst_speed;
+    roboclaw.ForwardM1(address, speed);
+  }
+  accel = getAccel();
 }

@@ -129,13 +129,13 @@ namespace test
 
                 QPPS.Text = units.ToString();
 
-                ConnectToSerialPort(units.ToString() + "|");
+                ConnectToSerialPort(units.ToString() + "|" + LEDNUMBER.Text + "|");
             }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            ConnectToSerialPort("0");
+            ConnectToSerialPort("0|0|");
         }
 
         private void Speed_TextChanged(object sender, TextChangedEventArgs e)

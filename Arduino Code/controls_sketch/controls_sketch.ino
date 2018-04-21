@@ -11,18 +11,41 @@ CRGB leds[NUM_STRIPS * NUM_LEDS_PER_STRIP];
 #define address 0x80
 // this is usb cable from Arduino to computer
 SoftwareSerial serial(10,11);
-//SoftwareSerial serial2(0,1);
 RoboClaw roboclaw(&serial, 10000);    // serial connection to RoboClaw
-unsigned int motorspeed = 0;
+int32_t encoderPos2 = 0;              //Readings for the encoder positions and resetting
+int32_t encoderPos1 = 0;
 
 void setup() {
-    Serial.begin(57600);
-    roboclaw.ResetEncoders(address);
-    
-    while( !Serial) ;
-    FastLED.addLeds<WS2811, 2, RGB>(leds, NUM_LEDS_PER_STRIP * NUM_STRIPS);
-    roboclaw.begin(38400);
-    roboclaw.ForwardM1(address, 0);
+  uint8_t status;
+  bool valid;
+  encoderPos1 = rovoclaw.ReadEncM1(address, &status, &valid);
+  Serial.begin(57600);
+  roboclaw.ResetEncoders(address);
+  attachInterrupt(digitalPinToInterrupt(3), SensorTrigger, CHANGE);
+  while( !Serial) ;
+  FastLED.addLeds<WS2811, 2, RGB>(leds, NUM_LEDS_PER_STRIP * NUM_STRIPS);
+  roboclaw.begin(38400);
+  roboclaw.ForwardM1(address, 0);
+}
+
+//Interrupt handler for the sensor kill switch and reset.
+void SensorTrigger(){
+  uint8_t status;
+  bool valid;
+  roboclaw.Forward(address, 0);
+  dst_speed = 35;
+  //Read the current encoder position, and move the motor backward at slow speeds
+  //Until the encoder position is the same as the first encoder position
+  encoderPos2 = roboclaw.ReadEncM1(address, &status, &valid);
+  roboclaw.Forward(address, dst_speed);
+  while(encoderPos2 != encoderPos1){
+    encoderPos2 = roboclaw.ReadEncM1(address, &status, &valid);
+  }
+  //This will need to be changed if the remote is going to be used. 
+  //If only the touchscreen pi is used this will be fine
+  roboclaw.Forward(address, 0);
+  dst_speed = 0;
+  encoderPos1 = roboclaw.ReadEncM1(address, &status, &valid);
 }
 
 // read qpps from the encoder and translate that to a value between 0 and 127
@@ -31,7 +54,6 @@ int readSpeedToUnits() {
   bool valid = true;
   long speed = abs(roboclaw.ReadSpeedM1(address, &status, &valid));
   speed = ((double)speed / 44000.0) * 127;
-
   // it's consistently off by a little, so we do some correction
   if (speed >= 3)
     speed += 2;
@@ -52,7 +74,7 @@ float k = 0.0;
 // time vars -- program set
 unsigned long long start = 0;
 unsigned long long now = 0;
-50|30|
+
 
 // use increasing exponential growth to calculate the acceleration
 int getAccel() {
@@ -88,19 +110,15 @@ void loop() {
   // using Serial.available() makes checking serial so much faster
   // this is neccessary to make the acceleration smooth
   if (Serial.available()) {
-    char buff[32] = { 0 };
-
     dst_speed = readUnsignedUntil('|');
+    //give this a different end char to prevent issues
     n_leds = readUnsignedUntil('|');
-    
     if (dst_speed) {
       if (T == 0.0) T = 0.00001;
       // calculate rate so that we approach dst_speed in T seconds
       // 0.01 is just a small number so that we don't divide by zero
       k = -1.0  * log(((float)dst_speed) / 0.01) / T;
-
       runLEDs();
-
       start = millis();
     }
   }
@@ -109,7 +127,6 @@ void loop() {
   int currentSpeed = readSpeedToUnits();
   if (currentSpeed < dst_speed) {
     roboclaw.ForwardM1(address, speed);
-
     // make sure not to overflow
     if ((int)speed + accel > 127) {
       speed = 127;

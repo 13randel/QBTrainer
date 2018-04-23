@@ -129,7 +129,7 @@ namespace test
 
                 QPPS.Text = units.ToString();
 
-                ConnectToSerialPort(units.ToString() + "|" + LEDNUMBER.Text + "|");
+                ConnectToSerialPort(units.ToString() + "|" + Length.Text + "|");
             }
         }
 

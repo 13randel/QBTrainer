@@ -18,32 +18,34 @@ int32_t encoderPos1 = 0;
 void setup() {
   uint8_t status;
   bool valid;
-  encoderPos1 = rovoclaw.ReadEncM1(address, &status, &valid);
+  encoderPos1 = roboclaw.ReadEncM1(address, &status, &valid);
   Serial.begin(57600);
   roboclaw.ResetEncoders(address);
-  attachInterrupt(digitalPinToInterrupt(3), SensorTrigger, CHANGE);
+  //attachInterrupt(digitalPinToInterrupt(3), SensorTrigger, CHANGE);
   while( !Serial) ;
   FastLED.addLeds<WS2811, 2, RGB>(leds, NUM_LEDS_PER_STRIP * NUM_STRIPS);
   roboclaw.begin(38400);
   roboclaw.ForwardM1(address, 0);
 }
-
+unsigned int n_leds = 0;
+unsigned int dst_speed = 0;
 //Interrupt handler for the sensor kill switch and reset.
+
 void SensorTrigger(){
   uint8_t status;
   bool valid;
-  roboclaw.Forward(address, 0);
+  roboclaw.ForwardM1(address, 0);
   dst_speed = 35;
   //Read the current encoder position, and move the motor backward at slow speeds
   //Until the encoder position is the same as the first encoder position
   encoderPos2 = roboclaw.ReadEncM1(address, &status, &valid);
-  roboclaw.Forward(address, dst_speed);
+  roboclaw.ForwardM1(address, dst_speed);
   while(encoderPos2 != encoderPos1){
     encoderPos2 = roboclaw.ReadEncM1(address, &status, &valid);
   }
   //This will need to be changed if the remote is going to be used. 
   //If only the touchscreen pi is used this will be fine
-  roboclaw.Forward(address, 0);
+  roboclaw.ForwardM1(address, 0);
   dst_speed = 0;
   encoderPos1 = roboclaw.ReadEncM1(address, &status, &valid);
 }
@@ -60,8 +62,7 @@ int readSpeedToUnits() {
   return speed;
 }
 
-unsigned int n_leds = 0;
-unsigned int dst_speed = 0;
+
 unsigned int speed = 0;
 unsigned int accel = 30;
 

@@ -5,7 +5,8 @@
 
 #define NUM_STRIPS 1
 #define NUM_LEDS_PER_STRIP 500
-CRGB leds[NUM_STRIPS * NUM_LEDS_PER_STRIP + 8];
+#define LED_RUNNER_SIZE 8
+CRGB leds[NUM_STRIPS * NUM_LEDS_PER_STRIP + 2*LED_RUNNER_SIZE];
  
 // Roboclaw is set to Serial Packet Mode
 #define address 0x80
@@ -110,41 +111,38 @@ unsigned int readUnsignedUntil(char delim) {
 }
 
 void runLEDs() {
-  unsigned int led_per_s = (((double)dst_speed / 127.0) * 300) / 2.5;
-  unsigned int delay_millis = ((double)n_leds / (double)led_per_s) / 1000;
+  double led_per_s = (((double)dst_speed / 127.0) * 300.0) / 2.5;
+  unsigned int delay_millis = ((double)n_leds / (double)led_per_s) ;
+  Serial.println(dst_speed);
+  Serial.println(led_per_s);
+  Serial.println(delay_millis);
+
+  delay_millis = 0;
   
-  for (int i = 0; i >= 508; i += 1) {
-    if (i < n_leds)
-      leds[i] = CRGB::White;
-      
-    else 
+  for (int i = 0; i >= NUM_LEDS_PER_STRIP + 2*LED_RUNNER_SIZE; i += 1) { 
       leds[i] = CRGB::Black;  
   }
   FastLED.show();
   for (int i = n_leds - 1; i >= 0; i -= 1) {
-    leds[i]   = CRGB::White;
-    leds[i+1] = CRGB::White;
-    leds[i+2] = CRGB::White;
-    leds[i+3] = CRGB::White;
-    delay(delay_millis);
+    for (int j = 0; j < LED_RUNNER_SIZE; j += 1) {
+      leds[i + j] = CRGB::White;
+    }
     FastLED.show();
-    leds[i]   = CRGB::Black;
-    leds[i+1] = CRGB::Black;
-    leds[i+2] = CRGB::Black;
-    leds[i+3] = CRGB::Black;
-    delay(delay_millis);
-    FastLED.show();
+    delay(2 * delay_millis);
+    for (int j = 0; j < LED_RUNNER_SIZE; j += 1) {
+      leds[i + j] = CRGB::Black;
+    }
   }
 }
 
 unsigned long long switch_toggle_time = 0;
 
 void loop() {
-  if (digitalRead(5) == HIGH || digitalRead(6) == HIGH)
-    SensorTrigger();
+  // if (digitalRead(5) == HIGH || digitalRead(6) == HIGH)
+    // SensorTrigger();
 
-  n_leds = 40;
-  dst_speed = 30;
+  n_leds = 500;
+  dst_speed = 60;
   runLEDs();
 
   /*

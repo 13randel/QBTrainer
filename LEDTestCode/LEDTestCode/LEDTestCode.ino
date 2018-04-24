@@ -6,15 +6,15 @@
 #include "FastLED.h"
 
 #define NUM_STRIPS 1
-#define NUM_LEDS_PER_STRIP 50
+#define NUM_LEDS_PER_STRIP 500
 CRGB leds[NUM_LEDS_PER_STRIP];
 
 // For mirroring strips, all the "special" stuff happens just in setup.  We
 // just addLeds multiple times, once for each strip
 void setup() {
   // tell FastLED there's 60 NEOPIXEL leds on pin 10
-  // FastLED.addLeds<WS2811, 8, RGB>(leds, NUM_LEDS_PER_STRIP);
-  FastLED.addLeds<WS2811, 8, RGB>(leds, NUM_LEDS_PER_STRIP);
+  // FastLED.addLeds<WS2811, 9, RGB>(leds, NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<WS2811, 9, RGB>(leds, NUM_LEDS_PER_STRIP);
   Serial.begin(57600);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only

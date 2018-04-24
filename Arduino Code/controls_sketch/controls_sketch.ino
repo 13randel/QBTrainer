@@ -23,9 +23,14 @@ void setup() {
   roboclaw.ResetEncoders(address);
   //attachInterrupt(digitalPinToInterrupt(3), SensorTrigger, CHANGE);
   while( !Serial) ;
-  FastLED.addLeds<WS2811, 2, RGB>(leds, NUM_LEDS_PER_STRIP * NUM_STRIPS);
+  FastLED.addLeds<WS2811, 8, RGB>(leds, NUM_LEDS_PER_STRIP * NUM_STRIPS);
   roboclaw.begin(38400);
   roboclaw.ForwardM1(address, 0);
+  for(int i = 0; i < NUM_LEDS_PER_STRIP; i++){
+    leds[i] = CRGB::Black;
+    delay(10);
+    FastLED.show();
+  }
 }
 unsigned int n_leds = 0;
 unsigned int dst_speed = 0;
@@ -93,17 +98,25 @@ unsigned int readUnsignedUntil(char delim) {
 void runLEDs() {
   unsigned int led_per_s = (((double)dst_speed / 127.0) * 300) / 2.5;
   unsigned int delay_millis = ((double)n_leds / (double)led_per_s) / 1000;
+  /*
   for (int i = 0; i >= 500; i += 1) {
     if (i < n_leds)
       leds[i] = CRGB::White;
+      
     else 
       leds[i] = CRGB::Black;
+    delay(1000);  
     FastLED.show();
-  }
-  for (int i = n_leds - 1; i >= 0; i -= 1) {
+  }*/
+  for (int i = 49/*n_leds - 1*/; i >= 0; i -= 1) {
+    leds[i] = CRGB::White;
+    delay(1000);
+    //delay(delay_millis);
+    FastLED.show();/*
     leds[i] = CRGB::Black;
+    //delay(delay_millis);
     delay(delay_millis);
-    FastLED.show();
+    FastLED.show();*/
   }
 }
 
@@ -121,7 +134,13 @@ void loop() {
       k = -1.0  * log(((float)dst_speed) / 0.01) / T;
       runLEDs();
       start = millis();
+      //delay
     }
+    for(int i = 0; i < NUM_LEDS_PER_STRIP; i++){
+    leds[i] = CRGB::Black;
+    delay(10);
+    FastLED.show();
+  }
   }
 
   now = millis();

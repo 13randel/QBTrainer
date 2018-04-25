@@ -1,7 +1,7 @@
 #include <RoboClaw.h>
 #include <SoftwareSerial.h>
 
-#include "FastLED.h"
+#include <FastLED.h>
 
 #define NUM_STRIPS 1
 #define NUM_LEDS_PER_STRIP 500
@@ -25,7 +25,7 @@ void setup() {
 /*
   attachInterrupt(digitalPinToInterrupt(3), Test, HIGH);
   */
-  attachInterrupt(digitalPinToInterrupt(2), SensorTrigger, CHANGE);
+  //attachInterrupt(digitalPinToInterrupt(2), SensorTrigger, CHANGE);
   pinMode(5, INPUT);
   pinMode(6, INPUT);
 
@@ -36,24 +36,20 @@ void setup() {
   FastLED.addLeds<WS2811, 9, RGB>(&leds[3], NUM_LEDS_PER_STRIP * NUM_STRIPS);
   roboclaw.begin(38400);
   roboclaw.ForwardM1(address, 0);
+  FastLED.clear();
+  /*
   for(int i = 0; i < NUM_LEDS_PER_STRIP; i++){
     leds[i] = CRGB::Black;
     FastLED.show();
-  }
+  }*/
 }
 unsigned int n_leds = 0;
 unsigned int dst_speed = 0;
 //Interrupt handler for the sensor kill switch and reset.
-void Test(){
-  
-  Serial.println("Triggered");
-}
 void SensorTrigger(){
   detachInterrupt()
   uint8_t status;
   bool valid;
-
-  //Serial.println("Trigger");
   
   roboclaw.ForwardM1(address, 0);
   dst_speed = 35;
@@ -124,19 +120,20 @@ void runLEDs() {
   for (int i = 0; i >= NUM_LEDS_PER_STRIP + 2*LED_RUNNER_SIZE; i += 1) { 
       leds[i] = CRGB::Black;  
   }
-  */
+  
   FastLED.show();
+  
   leds[n_leds-1] = CRGB::White;
   leds[n_leds-2] = CRGB::White;
   leds[n_leds-3] = CRGB::White;
   leds[n_leds-4] = CRGB::White;
   leds[n_leds-5] = CRGB::White;
-  FastLED.show();
+  FastLED.show();*/
   for(int i = n_leds-6; i>=0; i--){
     leds[i] = CRGB::White;
     FastLED.show();
-    delay(2*delay_millis);
-    leds[i+6] = CRGB::Black;
+    delay(2.0*delay_millis);
+    leds[i+5] = CRGB::Black;
     FastLED.show();
     
   }/*
@@ -157,11 +154,11 @@ unsigned long long switch_toggle_time = 0;
 void loop() {
   // if (digitalRead(5) == HIGH || digitalRead(6) == HIGH)
     // SensorTrigger();
-
+/*
   n_leds = 500;
   dst_speed = 60;
   runLEDs();
-  
+ */ 
 
   
   // using Serial.available() makes checking serial so much faster
@@ -177,7 +174,13 @@ void loop() {
       // calculate rate so that we approach dst_speed in T seconds
       // 0.01 is just a small number so that we don't divide by zero
       k = -1.0  * log(((float)dst_speed) / 0.01) / T;
-      //runLEDs();
+      leds[n_leds-1] = CRGB::White;
+      leds[n_leds-2] = CRGB::White;
+      leds[n_leds-3] = CRGB::White;
+      leds[n_leds-4] = CRGB::White;
+      leds[n_leds-5] = CRGB::White;
+      FastLED.show();
+      runLEDs();
       start = millis();
       //delay
     }
@@ -199,5 +202,5 @@ void loop() {
     roboclaw.ForwardM1(address, speed);
   }
   accel = getAccel();
-  */
+  
 }

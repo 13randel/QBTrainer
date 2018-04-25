@@ -133,6 +133,7 @@ void loop() {
   if (Serial.available()) {
     dst_speed = readUnsignedUntil('|');
     n_leds = readUnsignedUntil('|');
+    
     //If stop button pressed or proximity sensor triggered,
     //Call reset runction
     if(dst_speed == 200 && n_leds == 0) {SensorTrigger();}
@@ -148,6 +149,7 @@ void loop() {
       //delay
     }
   }
+
   now = millis();
   int currentSpeed = readSpeedToUnits();
   if (currentSpeed < dst_speed) {
@@ -164,6 +166,5 @@ void loop() {
     speed = dst_speed;
     roboclaw.BackwardM1(address, speed);
   }
-  accel = getAccel();
-  
+  accel = getAccel(); 
 }

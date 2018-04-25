@@ -47,6 +47,7 @@ void setup() {
 }
 unsigned int n_leds = 0;
 unsigned int dst_speed = 0;
+
 //Interrupt handler for the sensor kill switch and reset.
 void SensorTrigger(){
   //detachInterrupt()
@@ -127,8 +128,6 @@ void runLEDs() {
 unsigned long long switch_toggle_time = 0;
 
 void loop() {
-
-  
   // using Serial.available() makes checking serial so much faster
   // this is neccessary to make the acceleration smooth
   if (Serial.available()) {

@@ -125,6 +125,8 @@ void runLEDs() {
   }
 }
 
+bool in_reset = false;
+
 void loop() {
   // using Serial.available() makes checking serial so much faster
   // this is neccessary to make the acceleration smooth
@@ -137,16 +139,20 @@ void loop() {
       /*
        * 200|0| means stop and begin the reset process
        */
+      in_reset = true;
       dst_speed = 0;
       roboclaw.ForwardM1(address, 0);
       delay(500);
       roboclaw.ForwardM1(address, 35);
       return;
-    } else if (dest_speed == 201 && n_leds == 0) {
+    } else if (dst_speed == 201 && n_leds == 0) {
       /*
        * 201|0| means we hit home. stop immediately
        */
        roboclaw.BackwardM1(address, 0);
+       in_reset = false;
+       dst_speed = 0;
+       delay(2000);
        return;
     } else if (dst_speed) {
       if (T == 0.0) T = 0.00001;
@@ -161,21 +167,23 @@ void loop() {
     }
   }
 
-  now = millis();
-  int currentSpeed = readSpeedToUnits();
-  if (currentSpeed < dst_speed) {
-    roboclaw.BackwardM1(address, speed);
-    // make sure not to overflow
-    if ((int)speed + accel > 127) {
-      speed = 127;
-    } else {
-      speed += accel;
-    } 
-  } else if (currentSpeed > dst_speed) {
-    // decreases in speed should be instant
-    // this helps when we want to stop the motor
-    speed = dst_speed;
-    roboclaw.BackwardM1(address, speed);
+  if (!in_reset) {
+    now = millis();
+    int currentSpeed = readSpeedToUnits();
+    if (currentSpeed < dst_speed) {
+      roboclaw.BackwardM1(address, speed);
+      // make sure not to overflow
+      if ((int)speed + accel > 127) {
+        speed = 127;
+      } else {
+        speed += accel;
+      } 
+    } else if (currentSpeed > dst_speed) {
+      // decreases in speed should be instant
+      // this helps when we want to stop the motor
+      speed = dst_speed;
+      roboclaw.BackwardM1(address, speed);
+    }
+    accel = getAccel(); 
   }
-  accel = getAccel(); 
 }

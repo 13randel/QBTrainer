@@ -24,8 +24,8 @@ void setup() {
   roboclaw.ResetEncoders(address);
 /*
   attachInterrupt(digitalPinToInterrupt(3), Test, HIGH);
-  
-  attachInterrupt(digitalPinToInterrupt(2), Test, HIGH);*/
+  */
+  attachInterrupt(digitalPinToInterrupt(2), SensorTrigger, CHANGE);
   pinMode(5, INPUT);
   pinMode(6, INPUT);
 
@@ -45,13 +45,15 @@ unsigned int n_leds = 0;
 unsigned int dst_speed = 0;
 //Interrupt handler for the sensor kill switch and reset.
 void Test(){
+  
   Serial.println("Triggered");
 }
 void SensorTrigger(){
+  detachInterrupt()
   uint8_t status;
   bool valid;
 
-  Serial.println("Trigger");
+  //Serial.println("Trigger");
   
   roboclaw.ForwardM1(address, 0);
   dst_speed = 35;
@@ -67,6 +69,7 @@ void SensorTrigger(){
   roboclaw.ForwardM1(address, 0);
   dst_speed = 0;
   encoderPos1 = roboclaw.ReadEncM1(address, &status, &valid);
+  attachInterrupt(digitalPinToInterrupt(2), SensorTrigger, CHANGE)
 }
 
 // read qpps from the encoder and translate that to a value between 0 and 127

@@ -13,13 +13,13 @@ CRGB leds[NUM_STRIPS * NUM_LEDS_PER_STRIP + 2*LED_RUNNER_SIZE];
 // this is usb cable from Arduino to computer
 SoftwareSerial serial(10,11);
 RoboClaw roboclaw(&serial, 10000);    // serial connection to RoboClaw
-int32_t encoderPos2 = 0;              //Readings for the encoder positions and resetting
-int32_t encoderPos1 = 0;
+int encoderPos2 = 0;              //Readings for the encoder positions and resetting
+int encoderPos1 = 0;
 
 void setup() {
   uint8_t status;
   bool valid;
-  encoderPos1 = roboclaw.ReadEncM1(address, &status, &valid);
+  
   Serial.begin(57600);
   roboclaw.ResetEncoders(address);
 /*
@@ -67,6 +67,7 @@ void SensorTrigger(){
   //If only the touchscreen pi is used this will be fine
   roboclaw.ForwardM1(address, 0);
   dst_speed = 0;
+  roboclaw.ResetEncoders(address);
   encoderPos1 = roboclaw.ReadEncM1(address, &status, &valid);
   //attachInterrupt(digitalPinToInterrupt(2), SensorTrigger, CHANGE)
 }
@@ -112,7 +113,6 @@ unsigned int readUnsignedUntil(char delim) {
 }
 
 void runLEDs() {
-  Serial.println(n_leds);
   double led_per_s = (((double)dst_speed / 127.0) * 300.0) / 2.34;
   unsigned int delay_millis = ((double)n_leds / (double)led_per_s) ;
   //Lights up LEDs in order starting from the end of the strip
@@ -136,8 +136,26 @@ void loop() {
     
     //If stop button pressed or proximity sensor triggered,
     //Call reset runction
-    if(dst_speed == 200 && n_leds == 0) {SensorTrigger();}
-    if (dst_speed) {
+    // if(dst_speed == 200 && n_leds == 0) {SensorTrigger();}
+    uint8_t status;
+    bool valid;
+    if (dst_speed == 200 && n_leds == 0) {
+      dst_speed = 0;
+      encoderPos2 = roboclaw.ReadEncM1(address, &status, &valid);
+      roboclaw.BackwardM1(address, 0);
+      delay(500);
+      roboclaw.ForwardM1(address, 40);
+      Serial.println(encoderPos1);
+      Serial.println(encoderPos2);
+      Serial.println("----");
+      while (encoderPos2 > encoderPos1) {
+        encoderPos2 = roboclaw.ReadEncM1(address, &status, &valid);
+      }
+      roboclaw.ResetEncoders(address);
+      roboclaw.BackwardM1(address, 0);
+    } else if (dst_speed) {
+      roboclaw.ResetEncoders(address);
+      encoderPos1 = roboclaw.ReadEncM1(address, &status, &valid);
       if (T == 0.0) T = 0.00001;
       // calculate rate so that we approach dst_speed in T seconds
       // 0.01 is just a small number so that we don't divide by zero

@@ -42,7 +42,7 @@ void setup() {
   leds[500] = CRGB::White;
   leds[499] = CRGB::White;
   leds[498] = CRGB::White;
-  leds[498] = CRGB::White;
+  leds[497] = CRGB::White;
   FastLED.show();
 }
 unsigned int n_leds = 0;
@@ -114,28 +114,14 @@ void runLEDs() {
   Serial.println(n_leds);
   double led_per_s = (((double)dst_speed / 127.0) * 300.0) / 2.34;
   unsigned int delay_millis = ((double)n_leds / (double)led_per_s) ;
-
+  //Lights up LEDs in order starting from the end of the strip
   for(int i = 503-7; i>=503-n_leds; i--){
     leds[i] = CRGB::White;
     FastLED.show();
     delay(2.0*delay_millis);
     leds[i+6] = CRGB::Black;
     FastLED.show();
-    
   }
-  /*leds[499] = CRGB::White;
-  FastLED.show();
-  delay(100000);
-  for (int i = n_leds - 1; i >= 0; i -= 1) {
-    for (int j = 0; j < LED_RUNNER_SIZE; j += 1) {
-      leds[i + j] = CRGB::White;
-    }
-    FastLED.show();
-    delay(2 * delay_millis);
-    for (int j = 0; j < LED_RUNNER_SIZE; j += 1) {
-      leds[i + j] = CRGB::Black;
-    }
-  }*/
 }
 
 unsigned long long switch_toggle_time = 0;
@@ -147,11 +133,9 @@ void loop() {
   // this is neccessary to make the acceleration smooth
   if (Serial.available()) {
     dst_speed = readUnsignedUntil('|');
-   
-    //give this a different end char to prevent issues
     n_leds = readUnsignedUntil('|');
-    // char newline = Serial.read(); 
-    
+    //If stop button pressed or proximity sensor triggered,
+    //Call reset runction
     if(dst_speed == 200 && n_leds == 0) {SensorTrigger();}
     if (dst_speed) {
       if (T == 0.0) T = 0.00001;

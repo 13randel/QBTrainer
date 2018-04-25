@@ -13,15 +13,12 @@ CRGB leds[NUM_STRIPS * NUM_LEDS_PER_STRIP + 2*LED_RUNNER_SIZE];
 // this is usb cable from Arduino to computer
 SoftwareSerial serial(10,11);
 RoboClaw roboclaw(&serial, 10000);    // serial connection to RoboClaw
-int encoderPos2 = 0;              //Readings for the encoder positions and resetting
-int encoderPos1 = 0;
 
 void setup() {
   uint8_t status;
   bool valid;
   
   Serial.begin(57600);
-  roboclaw.ResetEncoders(address);
 /*
   attachInterrupt(digitalPinToInterrupt(3), Test, HIGH);
  
@@ -45,9 +42,11 @@ void setup() {
   leds[497] = CRGB::White;
   FastLED.show();
 }
+
 unsigned int n_leds = 0;
 unsigned int dst_speed = 0;
 
+/*
 //Interrupt handler for the sensor kill switch and reset.
 void SensorTrigger(){
   //detachInterrupt()
@@ -71,6 +70,7 @@ void SensorTrigger(){
   encoderPos1 = roboclaw.ReadEncM1(address, &status, &valid);
   //attachInterrupt(digitalPinToInterrupt(2), SensorTrigger, CHANGE)
 }
+*/
 
 // read qpps from the encoder and translate that to a value between 0 and 127
 int readSpeedToUnits() {
@@ -125,8 +125,6 @@ void runLEDs() {
   }
 }
 
-unsigned long long switch_toggle_time = 0;
-
 void loop() {
   // using Serial.available() makes checking serial so much faster
   // this is neccessary to make the acceleration smooth
@@ -135,27 +133,22 @@ void loop() {
     n_leds = readUnsignedUntil('|');
     
     //If stop button pressed or proximity sensor triggered,
-    //Call reset runction
-    // if(dst_speed == 200 && n_leds == 0) {SensorTrigger();}
-    uint8_t status;
-    bool valid;
     if (dst_speed == 200 && n_leds == 0) {
+      /*
+       * 200|0| means stop and begin the reset process
+       */
       dst_speed = 0;
-      encoderPos2 = roboclaw.ReadEncM1(address, &status, &valid);
-      roboclaw.BackwardM1(address, 0);
+      roboclaw.ForwardM1(address, 0);
       delay(500);
-      roboclaw.ForwardM1(address, 40);
-      Serial.println(encoderPos1);
-      Serial.println(encoderPos2);
-      Serial.println("----");
-      while (encoderPos2 > encoderPos1) {
-        encoderPos2 = roboclaw.ReadEncM1(address, &status, &valid);
-      }
-      roboclaw.ResetEncoders(address);
-      roboclaw.BackwardM1(address, 0);
+      roboclaw.ForwardM1(address, 35);
+      return;
+    } else if (dest_speed == 201 && n_leds == 0) {
+      /*
+       * 201|0| means we hit home. stop immediately
+       */
+       roboclaw.BackwardM1(address, 0);
+       return;
     } else if (dst_speed) {
-      roboclaw.ResetEncoders(address);
-      encoderPos1 = roboclaw.ReadEncM1(address, &status, &valid);
       if (T == 0.0) T = 0.00001;
       // calculate rate so that we approach dst_speed in T seconds
       // 0.01 is just a small number so that we don't divide by zero

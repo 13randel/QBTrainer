@@ -24,8 +24,8 @@ void setup() {
   roboclaw.ResetEncoders(address);
 /*
   attachInterrupt(digitalPinToInterrupt(3), Test, HIGH);
-  */
-  //attachInterrupt(digitalPinToInterrupt(2), SensorTrigger, CHANGE);
+ 
+  //attachInterrupt(digitalPinToInterrupt(2), SensorTrigger, CHANGE); */
   pinMode(5, INPUT);
   pinMode(6, INPUT);
 
@@ -47,17 +47,17 @@ unsigned int n_leds = 0;
 unsigned int dst_speed = 0;
 //Interrupt handler for the sensor kill switch and reset.
 void SensorTrigger(){
-  detachInterrupt()
+  //detachInterrupt()
   uint8_t status;
   bool valid;
   
-  roboclaw.ForwardM1(address, 0);
+  roboclaw.BackwardM1(address, 0);
   dst_speed = 35;
   //Read the current encoder position, and move the motor backward at slow speeds
   //Until the encoder position is the same as the first encoder position
   encoderPos2 = roboclaw.ReadEncM1(address, &status, &valid);
   roboclaw.ForwardM1(address, dst_speed);
-  while(encoderPos2 != encoderPos1){
+  while(encoderPos2 > encoderPos1){
     encoderPos2 = roboclaw.ReadEncM1(address, &status, &valid);
   }
   //This will need to be changed if the remote is going to be used. 
@@ -65,7 +65,7 @@ void SensorTrigger(){
   roboclaw.ForwardM1(address, 0);
   dst_speed = 0;
   encoderPos1 = roboclaw.ReadEncM1(address, &status, &valid);
-  attachInterrupt(digitalPinToInterrupt(2), SensorTrigger, CHANGE)
+  //attachInterrupt(digitalPinToInterrupt(2), SensorTrigger, CHANGE)
 }
 
 // read qpps from the encoder and translate that to a value between 0 and 127
@@ -152,23 +152,33 @@ void runLEDs() {
 unsigned long long switch_toggle_time = 0;
 
 void loop() {
-  // if (digitalRead(5) == HIGH || digitalRead(6) == HIGH)
+ 
+  
+  /* if (digitalRead(5) == HIGH || digitalRead(6) == HIGH)
     // SensorTrigger();
-/*
+
   n_leds = 500;
   dst_speed = 60;
+  leds[n_leds-1] = CRGB::White;
+  leds[n_leds-2] = CRGB::White;
+  leds[n_leds-3] = CRGB::White;
+  leds[n_leds-4] = CRGB::White;
+  leds[n_leds-5] = CRGB::White;
+  FastLED.show();
   runLEDs();
- */ 
+  */
 
   
   // using Serial.available() makes checking serial so much faster
   // this is neccessary to make the acceleration smooth
   if (Serial.available()) {
     dst_speed = readUnsignedUntil('|');
-    if(dst_speed == 200) SensorTrigger();
+   
     //give this a different end char to prevent issues
     n_leds = readUnsignedUntil('|');
-    // char newline = Serial.read();
+    // char newline = Serial.read(); 
+    
+    if(dst_speed == 200 && n_leds == 0) {SensorTrigger();}
     if (dst_speed) {
       if (T == 0.0) T = 0.00001;
       // calculate rate so that we approach dst_speed in T seconds
@@ -188,7 +198,7 @@ void loop() {
   now = millis();
   int currentSpeed = readSpeedToUnits();
   if (currentSpeed < dst_speed) {
-    roboclaw.ForwardM1(address, speed);
+    roboclaw.BackwardM1(address, speed);
     // make sure not to overflow
     if ((int)speed + accel > 127) {
       speed = 127;
@@ -199,7 +209,7 @@ void loop() {
     // decreases in speed should be instant
     // this helps when we want to stop the motor
     speed = dst_speed;
-    roboclaw.ForwardM1(address, speed);
+    roboclaw.BackwardM1(address, speed);
   }
   accel = getAccel();
   

@@ -37,11 +37,13 @@ void setup() {
   roboclaw.begin(38400);
   roboclaw.ForwardM1(address, 0);
   FastLED.clear();
-  /*
-  for(int i = 0; i < NUM_LEDS_PER_STRIP; i++){
-    leds[i] = CRGB::Black;
-    FastLED.show();
-  }*/
+  leds[502] = CRGB::White;
+  leds[501] = CRGB::White;
+  leds[500] = CRGB::White;
+  leds[499] = CRGB::White;
+  leds[498] = CRGB::White;
+  leds[498] = CRGB::White;
+  FastLED.show();
 }
 unsigned int n_leds = 0;
 unsigned int dst_speed = 0;
@@ -109,34 +111,21 @@ unsigned int readUnsignedUntil(char delim) {
 }
 
 void runLEDs() {
+  Serial.println(n_leds);
   double led_per_s = (((double)dst_speed / 127.0) * 300.0) / 2.34;
   unsigned int delay_millis = ((double)n_leds / (double)led_per_s) ;
-  Serial.println(dst_speed);
-  Serial.println(led_per_s);
-  Serial.println(delay_millis);
 
-  delay_millis = 0;
-  /*
-  for (int i = 0; i >= NUM_LEDS_PER_STRIP + 2*LED_RUNNER_SIZE; i += 1) { 
-      leds[i] = CRGB::Black;  
-  }
-  
-  FastLED.show();
-  
-  leds[n_leds-1] = CRGB::White;
-  leds[n_leds-2] = CRGB::White;
-  leds[n_leds-3] = CRGB::White;
-  leds[n_leds-4] = CRGB::White;
-  leds[n_leds-5] = CRGB::White;
-  FastLED.show();*/
-  for(int i = n_leds-6; i>=0; i--){
+  for(int i = 503-7; i>=503-n_leds; i--){
     leds[i] = CRGB::White;
     FastLED.show();
     delay(2.0*delay_millis);
-    leds[i+5] = CRGB::Black;
+    leds[i+6] = CRGB::Black;
     FastLED.show();
     
-  }/*
+  }
+  /*leds[499] = CRGB::White;
+  FastLED.show();
+  delay(100000);
   for (int i = n_leds - 1; i >= 0; i -= 1) {
     for (int j = 0; j < LED_RUNNER_SIZE; j += 1) {
       leds[i + j] = CRGB::White;
@@ -152,21 +141,6 @@ void runLEDs() {
 unsigned long long switch_toggle_time = 0;
 
 void loop() {
- 
-  
-  /* if (digitalRead(5) == HIGH || digitalRead(6) == HIGH)
-    // SensorTrigger();
-
-  n_leds = 500;
-  dst_speed = 60;
-  leds[n_leds-1] = CRGB::White;
-  leds[n_leds-2] = CRGB::White;
-  leds[n_leds-3] = CRGB::White;
-  leds[n_leds-4] = CRGB::White;
-  leds[n_leds-5] = CRGB::White;
-  FastLED.show();
-  runLEDs();
-  */
 
   
   // using Serial.available() makes checking serial so much faster
@@ -183,15 +157,11 @@ void loop() {
       if (T == 0.0) T = 0.00001;
       // calculate rate so that we approach dst_speed in T seconds
       // 0.01 is just a small number so that we don't divide by zero
-      k = -1.0  * log(((float)dst_speed) / 0.01) / T;
-      leds[n_leds-1] = CRGB::White;
-      leds[n_leds-2] = CRGB::White;
-      leds[n_leds-3] = CRGB::White;
-      leds[n_leds-4] = CRGB::White;
-      leds[n_leds-5] = CRGB::White;
-      FastLED.show();
+      k = -1.0  * log(((float)dst_speed) / 0.01) / T;         
       runLEDs();
       start = millis();
+      FastLED.clear();
+      FastLED.show();
       //delay
     }
   }

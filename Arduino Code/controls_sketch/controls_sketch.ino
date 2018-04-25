@@ -38,7 +38,6 @@ void setup() {
   roboclaw.ForwardM1(address, 0);
   for(int i = 0; i < NUM_LEDS_PER_STRIP; i++){
     leds[i] = CRGB::Black;
-    delay(1);
     FastLED.show();
   }
 }
@@ -111,18 +110,33 @@ unsigned int readUnsignedUntil(char delim) {
 }
 
 void runLEDs() {
-  double led_per_s = (((double)dst_speed / 127.0) * 300.0) / 2.5;
+  double led_per_s = (((double)dst_speed / 127.0) * 300.0) / 2.34;
   unsigned int delay_millis = ((double)n_leds / (double)led_per_s) ;
   Serial.println(dst_speed);
   Serial.println(led_per_s);
   Serial.println(delay_millis);
 
   delay_millis = 0;
-  
+  /*
   for (int i = 0; i >= NUM_LEDS_PER_STRIP + 2*LED_RUNNER_SIZE; i += 1) { 
       leds[i] = CRGB::Black;  
   }
+  */
   FastLED.show();
+  leds[n_leds-1] = CRGB::White;
+  leds[n_leds-2] = CRGB::White;
+  leds[n_leds-3] = CRGB::White;
+  leds[n_leds-4] = CRGB::White;
+  leds[n_leds-5] = CRGB::White;
+  FastLED.show();
+  for(int i = n_leds-6; i>=0; i--){
+    leds[i] = CRGB::White;
+    FastLED.show();
+    delay(2*delay_millis);
+    leds[i+6] = CRGB::Black;
+    FastLED.show();
+    
+  }/*
   for (int i = n_leds - 1; i >= 0; i -= 1) {
     for (int j = 0; j < LED_RUNNER_SIZE; j += 1) {
       leds[i + j] = CRGB::White;
@@ -132,7 +146,7 @@ void runLEDs() {
     for (int j = 0; j < LED_RUNNER_SIZE; j += 1) {
       leds[i + j] = CRGB::Black;
     }
-  }
+  }*/
 }
 
 unsigned long long switch_toggle_time = 0;
@@ -144,12 +158,14 @@ void loop() {
   n_leds = 500;
   dst_speed = 60;
   runLEDs();
+  
 
-  /*
+  
   // using Serial.available() makes checking serial so much faster
   // this is neccessary to make the acceleration smooth
   if (Serial.available()) {
     dst_speed = readUnsignedUntil('|');
+    if(dst_speed == 200) SensorTrigger();
     //give this a different end char to prevent issues
     n_leds = readUnsignedUntil('|');
     // char newline = Serial.read();

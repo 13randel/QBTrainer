@@ -135,7 +135,7 @@ namespace test
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            ConnectToSerialPort("0|0|");
+            ConnectToSerialPort("200|0|");
         }
 
         private void Speed_TextChanged(object sender, TextChangedEventArgs e)

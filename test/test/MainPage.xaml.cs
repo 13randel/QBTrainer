@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Devices.Enumeration;
 using Windows.Devices.SerialCommunication;
@@ -17,6 +18,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+//using ModbusTCP;
+using EasyModbus;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -27,35 +31,60 @@ namespace test
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        //      private ModbusTCP.Master MBmaster;
+        ModbusClient modbusClient = new ModbusClient();
         private int endDelay;
         private int startDelay;
-        public MainPage() => this.InitializeComponent();
-
-
-        private async void ConnectToSerialPort(string message)
+        private SerialDevice Arduino;
+        private DataWriter ArduinodataWriter;
+        private bool load = false;
+        public MainPage()
         {
-            ushort vid = 0x2A03;
-            ushort pid = 0x0042;
-            
-            string selector = SerialDevice.GetDeviceSelectorFromUsbVidPid(vid, pid);
-            DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(selector);
-            if (devices.Count > 0)
-            {
-                DeviceInformation deviceInfo = devices[0];
-                SerialDevice serialDevice = await SerialDevice.FromIdAsync(deviceInfo.Id);
-                Debug.WriteLine(serialDevice);
-                serialDevice.BaudRate = 57600;
-                serialDevice.DataBits = 8;
-                serialDevice.StopBits = SerialStopBitCount.Two;
-                serialDevice.Parity = SerialParity.None;
+            this.InitializeComponent();   
+        }
 
-                DataWriter dataWriter = new DataWriter(serialDevice.OutputStream);
-                dataWriter.WriteString(message);
-                await dataWriter.StoreAsync();
-                dataWriter.DetachStream();
-                dataWriter = null;
-                //await serialDevice.OutputStream.FlushAsync();
-                serialDevice.OutputStream.Dispose();
+        private async void awaitProxInput()
+        {
+            while (modbusClient.ReadCoils(4, 1)[0] != true)
+            {
+                // don't run again for at least 200 milliseconds
+                await Task.Delay(100);
+            }
+            ReadToSerialPort("201|0|");
+
+        }
+
+        private async void ConnectToClickPLC2()
+        {
+            try
+            {
+                modbusClient = new ModbusClient("169.254.38.41", 502);
+                //Then connect to the specified server
+                modbusClient.Connect();
+
+                // Create new modbus master and add event functions
+                //          MBmaster = new Master("169.254.38.41", 502);
+                //MBmaster.OnResponseData += new ModbusTCP.Master.ResponseData(MBmaster_OnResponseData);
+                //MBmaster.OnException += new ModbusTCP.Master.ExceptionData(MBmaster_OnException);
+                // Show additional fields, enable watchdog
+            }
+            catch (Exception error)
+            {
+                MessageDialog popup = new MessageDialog("PLC not Connected");
+                await popup.ShowAsync();
+            }
+            
+        }
+
+
+        private async void ReadToSerialPort(string message)
+        {
+
+            if (load)
+            {
+                awaitProxInput();
+                ArduinodataWriter.WriteString(message);
+                await ArduinodataWriter.StoreAsync();
             }
             else
             {
@@ -129,13 +158,22 @@ namespace test
 
                 QPPS.Text = units.ToString();
 
-                ConnectToSerialPort(units.ToString() + "|" + LEDNUMBER.Text + "|");
+                ReadToSerialPort(units.ToString() + "|" + LEDNUMBER.Text + "|");
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            ConnectToSerialPort("200|0|");
+            if (load)
+            {
+                awaitProxInput();
+                ReadToSerialPort("200|0|");
+            }
+            else
+            {
+                MessageDialog popup = new MessageDialog("Sorry, Devices need to be loaded");
+                await popup.ShowAsync();
+            }
         }
 
         private void Speed_TextChanged(object sender, TextChangedEventArgs e)
@@ -184,6 +222,49 @@ namespace test
             catch (FormatException)
             {
                 LEDNUMBER.Text = "";
+            }
+        }
+
+        private async void ConnectToSerialPort(object sender, RoutedEventArgs e)
+        {
+            if (!load)
+            {
+                ushort vid = 0x2A03;
+                ushort pid = 0x0042;
+
+                string selector = SerialDevice.GetDeviceSelectorFromUsbVidPid(vid, pid);
+                DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(selector);
+                if (devices.Count > 0)
+                {
+                    DeviceInformation deviceInfo = devices[0];
+                    Arduino = await SerialDevice.FromIdAsync(deviceInfo.Id);
+                    Debug.WriteLine(Arduino);
+                    Arduino.BaudRate = 57600;
+                    Arduino.DataBits = 8;
+                    Arduino.StopBits = SerialStopBitCount.Two;
+                    Arduino.Parity = SerialParity.None;
+                    ArduinodataWriter = new DataWriter(Arduino.OutputStream);
+                    ConnectToClickPLC2();
+                }
+                else
+                {
+                    MessageDialog popup = new MessageDialog("Sorry, no device found.");
+                    await popup.ShowAsync();
+                }
+                load = true;
+            }
+        }
+
+        private async void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            if (load)
+            {
+                ReadToSerialPort("201|0|");
+            }
+            else
+            {
+                MessageDialog popup = new MessageDialog("Sorry, Devices need to be loaded");
+                await popup.ShowAsync();
             }
         }
     }

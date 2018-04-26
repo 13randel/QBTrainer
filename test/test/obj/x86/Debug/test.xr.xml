@@ -50,14 +50,9 @@
       <RootProperty Name="TextWrapping" />
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Foreground" />
-<<<<<<< HEAD
       <RootProperty Name="RenderTransformOrigin" />
       <RootProperty Name="Width" />
       <RootProperty Name="RenderTransform" />
-=======
-      <RootProperty Name="Width" />
-      <RootEvent Name="SelectionChanged" />
->>>>>>> 3350e9620d797f0e2efd0f272f28e72e6e1f38e5
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TextBox">
       <RootProperty Name="InputScope" />
@@ -67,7 +62,6 @@
       <RootProperty Name="VerticalAlignment" />
       <RootProperty Name="Width" />
       <RootEvent Name="TextChanged" />
-<<<<<<< HEAD
     </RootType>
     <RootType FullName="Windows.UI.Xaml.Media.CompositeTransform">
       <RootProperty Name="ScaleX" />
@@ -79,8 +73,6 @@
       <RootProperty Name="Text" />
       <RootProperty Name="FontWeight" />
       <RootProperty Name="FontSize" />
-=======
->>>>>>> 3350e9620d797f0e2efd0f272f28e72e6e1f38e5
     </RootType>
     <RootType FullName="test.MainPage" />
   </Roots.RootTypes>

@@ -1,5 +1,1 @@
-<<<<<<< HEAD
 C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\test.csproj;x86
-=======
-C:\Users\Joshu\Documents\GitHub\QBTrainer\test\test\test.csproj;x86
->>>>>>> 3350e9620d797f0e2efd0f272f28e72e6e1f38e5

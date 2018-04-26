@@ -1,1 +1,1 @@
-C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\AppPackages\test_1.0.51.0_Debug_Test\test_1.0.51.0_arm_Debug.appxbundle
+C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\AppPackages\test_1.0.53.0_Debug_Test\test_1.0.53.0_arm_Debug.appxbundle

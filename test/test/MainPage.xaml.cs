@@ -88,7 +88,7 @@ namespace test
             }
             else
             {
-                MessageDialog popup = new MessageDialog("Sorry, no device found.");
+                MessageDialog popup = new MessageDialog("Sorry, Devices need to be loaded");
                 await popup.ShowAsync();
             }
         }
@@ -227,7 +227,7 @@ namespace test
 
         private async void ConnectToSerialPort(object sender, RoutedEventArgs e)
         {
-            if (!load)
+            if (!load && Convert.ToInt32(LEDNUMBER.Text) > 0)
             {
                 ushort vid = 0x2A03;
                 ushort pid = 0x0042;
@@ -245,6 +245,8 @@ namespace test
                     Arduino.Parity = SerialParity.None;
                     ArduinodataWriter = new DataWriter(Arduino.OutputStream);
                     ConnectToClickPLC2();
+                    ArduinodataWriter.WriteString("0|" + LEDNUMBER.Text + "| ");
+                    await ArduinodataWriter.StoreAsync();
                 }
                 else
                 {

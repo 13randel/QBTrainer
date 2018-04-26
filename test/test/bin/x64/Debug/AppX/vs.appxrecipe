@@ -19,25 +19,25 @@
     <DeployOptionalPackages>false</DeployOptionalPackages>
     <WindowsSdkPath>C:\Program Files %28x86%29\Windows Kits\10\</WindowsSdkPath>
     <LayoutDir>C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\x64\Debug\AppX</LayoutDir>
-    <RegisteredManifestChecksum>EF04655D3C373632AB44EAEEDF46B76CFC6E3BE202D3C275CD893C97B266ECEE</RegisteredManifestChecksum>
-    <RegisteredPackageMoniker>f2dd9f6c-ce92-41be-9947-5d6645431595_1.0.50.0_x64__q5pdg7jqwwj4w</RegisteredPackageMoniker>
+    <RegisteredManifestChecksum>F2CC13CCBF64E469F63C41E3BAC2A7438A9D9C85902D27374C441060D3704026</RegisteredManifestChecksum>
+    <RegisteredPackageMoniker>f2dd9f6c-ce92-41be-9947-5d6645431595_1.0.52.0_x64__q5pdg7jqwwj4w</RegisteredPackageMoniker>
     <RegisteredUserModeAppID>f2dd9f6c-ce92-41be-9947-5d6645431595_q5pdg7jqwwj4w!App</RegisteredUserModeAppID>
     <RegisteredPackageID>f2dd9f6c-ce92-41be-9947-5d6645431595</RegisteredPackageID>
     <RegisteredPackagePublisher>CN=Link_</RegisteredPackagePublisher>
-    <RegisteredVersion>1.0.50.0</RegisteredVersion>
+    <RegisteredVersion>1.0.52.0</RegisteredVersion>
     <JitOptimizationSuppressed>True</JitOptimizationSuppressed>
   </PropertyGroup>
   <ItemGroup>
     <AppXManifest Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\x64\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2018-04-26T04:50:16.434</Modified>
+      <Modified>2018-04-26T05:43:35.100</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\x64\Debug\test.exe">
       <PackagePath>entrypoint\test.exe</PackagePath>
-      <Modified>2018-04-26T04:50:15.387</Modified>
+      <Modified>2018-04-26T05:43:33.249</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Link_\.nuget\packages\easymodbustcp\5.0.0\lib\EasyModbus.dll">
       <PackagePath>EasyModbus.dll</PackagePath>
@@ -752,11 +752,11 @@
     <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\x64\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2018-04-26T04:50:16.058</Modified>
+      <Modified>2018-04-26T05:43:34.484</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Link_\Documents\GitHub\QBTrainer\test\test\bin\x64\Debug\Core\test.exe">
       <PackagePath>test.exe</PackagePath>
-      <Modified>2018-04-26T04:50:16.423</Modified>
+      <Modified>2018-04-26T05:43:35.083</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

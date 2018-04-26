@@ -14,6 +14,11 @@ CRGB leds[NUM_STRIPS * NUM_LEDS_PER_STRIP + 2*LED_RUNNER_SIZE];
 SoftwareSerial serial(10,11);
 RoboClaw roboclaw(&serial, 10000);    // serial connection to RoboClaw
 
+//If stop button pressed or proximity sensor triggered,
+int buttonState1 = 0;         // variable for reading the pushbutton status
+int buttonState2 = 0;         // variable for reading the pushbutton status
+int ESTOP1 = 5;
+int ESTOP2 = 6;
 void setup() {
   uint8_t status;
   bool valid;
@@ -23,11 +28,8 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(3), Test, HIGH);
  
   //attachInterrupt(digitalPinToInterrupt(2), SensorTrigger, CHANGE); */
-  pinMode(5, INPUT);
-  pinMode(6, INPUT);
-
-  pinMode(7, OUTPUT);
-  pinMode(8, OUTPUT);
+  pinMode(ESTOP1, INPUT);
+  pinMode(ESTOP2, INPUT);
   
   while( !Serial) ;
   FastLED.addLeds<WS2811, 9, RGB>(&leds[3], NUM_LEDS_PER_STRIP * NUM_STRIPS);
@@ -125,6 +127,21 @@ void runLEDs() {
   }
 }
 
+void CheckESTOP()
+{
+  // read the state of the E-Stop value:
+    buttonState1 = analogRead(ESTOP1);
+    buttonState2 = analogRead(ESTOP2);
+    if (buttonState1 >= 980 || buttonState2 >= 980)
+     {
+        
+        roboclaw.ForwardM1(address, 0);
+        while(buttonState1 >= 980 || buttonState2 >= 980){
+          Serial.println("ESTOP");
+          delay(10000);
+        }
+     }
+}
 bool in_reset = false;
 
 void loop() {
@@ -133,9 +150,14 @@ void loop() {
   if (Serial.available()) {
     dst_speed = readUnsignedUntil('|');
     n_leds = readUnsignedUntil('|');
+    //show Length
+    leds[502-n_leds] = CRGB::White;
+    FastLED.show();
     
-    //If stop button pressed or proximity sensor triggered,
-    if (dst_speed == 200 && n_leds == 0) {
+
+
+    CheckESTOP();
+     if (dst_speed == 200 && n_leds == 0) {
       /*
        * 200|0| means stop and begin the reset process
        */
@@ -144,6 +166,7 @@ void loop() {
       roboclaw.ForwardM1(address, 0);
       delay(500);
       roboclaw.ForwardM1(address, 35);
+      CheckESTOP();
       return;
     } else if (dst_speed == 201 && n_leds == 0) {
       /*
@@ -153,6 +176,7 @@ void loop() {
        in_reset = false;
        dst_speed = 0;
        delay(2000);
+       CheckESTOP();
        return;
     } else if (dst_speed) {
       if (T == 0.0) T = 0.00001;
@@ -171,6 +195,7 @@ void loop() {
     now = millis();
     int currentSpeed = readSpeedToUnits();
     if (currentSpeed < dst_speed) {
+      CheckESTOP();
       roboclaw.BackwardM1(address, speed);
       // make sure not to overflow
       if ((int)speed + accel > 127) {
@@ -182,6 +207,7 @@ void loop() {
       // decreases in speed should be instant
       // this helps when we want to stop the motor
       speed = dst_speed;
+      CheckESTOP();
       roboclaw.BackwardM1(address, speed);
     }
     accel = getAccel(); 

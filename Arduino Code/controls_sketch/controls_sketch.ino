@@ -13,15 +13,12 @@ CRGB leds[NUM_STRIPS * NUM_LEDS_PER_STRIP + 2*LED_RUNNER_SIZE];
 // this is usb cable from Arduino to computer
 SoftwareSerial serial(10,11);
 RoboClaw roboclaw(&serial, 10000);    // serial connection to RoboClaw
-int32_t encoderPos2 = 0;              //Readings for the encoder positions and resetting
-int32_t encoderPos1 = 0;
 
 void setup() {
   uint8_t status;
   bool valid;
-  encoderPos1 = roboclaw.ReadEncM1(address, &status, &valid);
+  
   Serial.begin(57600);
-  roboclaw.ResetEncoders(address);
 /*
   attachInterrupt(digitalPinToInterrupt(3), Test, HIGH);
  
@@ -37,14 +34,19 @@ void setup() {
   roboclaw.begin(38400);
   roboclaw.ForwardM1(address, 0);
   FastLED.clear();
-  /*
-  for(int i = 0; i < NUM_LEDS_PER_STRIP; i++){
-    leds[i] = CRGB::Black;
-    FastLED.show();
-  }*/
+  leds[502] = CRGB::White;
+  leds[501] = CRGB::White;
+  leds[500] = CRGB::White;
+  leds[499] = CRGB::White;
+  leds[498] = CRGB::White;
+  leds[497] = CRGB::White;
+  FastLED.show();
 }
+
 unsigned int n_leds = 0;
 unsigned int dst_speed = 0;
+
+/*
 //Interrupt handler for the sensor kill switch and reset.
 void SensorTrigger(){
   //detachInterrupt()
@@ -64,9 +66,11 @@ void SensorTrigger(){
   //If only the touchscreen pi is used this will be fine
   roboclaw.ForwardM1(address, 0);
   dst_speed = 0;
+  roboclaw.ResetEncoders(address);
   encoderPos1 = roboclaw.ReadEncM1(address, &status, &valid);
   //attachInterrupt(digitalPinToInterrupt(2), SensorTrigger, CHANGE)
 }
+*/
 
 // read qpps from the encoder and translate that to a value between 0 and 127
 int readSpeedToUnits() {
@@ -111,106 +115,75 @@ unsigned int readUnsignedUntil(char delim) {
 void runLEDs() {
   double led_per_s = (((double)dst_speed / 127.0) * 300.0) / 2.34;
   unsigned int delay_millis = ((double)n_leds / (double)led_per_s) ;
-  Serial.println(dst_speed);
-  Serial.println(led_per_s);
-  Serial.println(delay_millis);
-
-  delay_millis = 0;
-  /*
-  for (int i = 0; i >= NUM_LEDS_PER_STRIP + 2*LED_RUNNER_SIZE; i += 1) { 
-      leds[i] = CRGB::Black;  
-  }
-  
-  FastLED.show();
-  
-  leds[n_leds-1] = CRGB::White;
-  leds[n_leds-2] = CRGB::White;
-  leds[n_leds-3] = CRGB::White;
-  leds[n_leds-4] = CRGB::White;
-  leds[n_leds-5] = CRGB::White;
-  FastLED.show();*/
-  for(int i = n_leds-6; i>=0; i--){
+  //Lights up LEDs in order starting from the end of the strip
+  for(int i = 503-7; i>=503-n_leds; i--){
     leds[i] = CRGB::White;
     FastLED.show();
     delay(2.0*delay_millis);
-    leds[i+5] = CRGB::Black;
+    leds[i+6] = CRGB::Black;
     FastLED.show();
-    
-  }/*
-  for (int i = n_leds - 1; i >= 0; i -= 1) {
-    for (int j = 0; j < LED_RUNNER_SIZE; j += 1) {
-      leds[i + j] = CRGB::White;
-    }
-    FastLED.show();
-    delay(2 * delay_millis);
-    for (int j = 0; j < LED_RUNNER_SIZE; j += 1) {
-      leds[i + j] = CRGB::Black;
-    }
-  }*/
+  }
 }
 
-unsigned long long switch_toggle_time = 0;
+bool in_reset = false;
 
 void loop() {
- 
-  
-  /* if (digitalRead(5) == HIGH || digitalRead(6) == HIGH)
-    // SensorTrigger();
-
-  n_leds = 500;
-  dst_speed = 60;
-  leds[n_leds-1] = CRGB::White;
-  leds[n_leds-2] = CRGB::White;
-  leds[n_leds-3] = CRGB::White;
-  leds[n_leds-4] = CRGB::White;
-  leds[n_leds-5] = CRGB::White;
-  FastLED.show();
-  runLEDs();
-  */
-
-  
   // using Serial.available() makes checking serial so much faster
   // this is neccessary to make the acceleration smooth
   if (Serial.available()) {
     dst_speed = readUnsignedUntil('|');
-   
-    //give this a different end char to prevent issues
     n_leds = readUnsignedUntil('|');
-    // char newline = Serial.read(); 
     
-    if(dst_speed == 200 && n_leds == 0) {SensorTrigger();}
-    if (dst_speed) {
+    //If stop button pressed or proximity sensor triggered,
+    if (dst_speed == 200 && n_leds == 0) {
+      /*
+       * 200|0| means stop and begin the reset process
+       */
+      in_reset = true;
+      dst_speed = 0;
+      roboclaw.ForwardM1(address, 0);
+      delay(500);
+      roboclaw.ForwardM1(address, 35);
+      return;
+    } else if (dst_speed == 201 && n_leds == 0) {
+      /*
+       * 201|0| means we hit home. stop immediately
+       */
+       roboclaw.BackwardM1(address, 0);
+       in_reset = false;
+       dst_speed = 0;
+       delay(2000);
+       return;
+    } else if (dst_speed) {
       if (T == 0.0) T = 0.00001;
       // calculate rate so that we approach dst_speed in T seconds
       // 0.01 is just a small number so that we don't divide by zero
-      k = -1.0  * log(((float)dst_speed) / 0.01) / T;
-      leds[n_leds-1] = CRGB::White;
-      leds[n_leds-2] = CRGB::White;
-      leds[n_leds-3] = CRGB::White;
-      leds[n_leds-4] = CRGB::White;
-      leds[n_leds-5] = CRGB::White;
-      FastLED.show();
+      k = -1.0  * log(((float)dst_speed) / 0.01) / T;         
       runLEDs();
       start = millis();
+      FastLED.clear();
+      FastLED.show();
       //delay
     }
   }
-  now = millis();
-  int currentSpeed = readSpeedToUnits();
-  if (currentSpeed < dst_speed) {
-    roboclaw.BackwardM1(address, speed);
-    // make sure not to overflow
-    if ((int)speed + accel > 127) {
-      speed = 127;
-    } else {
-      speed += accel;
-    } 
-  } else if (currentSpeed > dst_speed) {
-    // decreases in speed should be instant
-    // this helps when we want to stop the motor
-    speed = dst_speed;
-    roboclaw.BackwardM1(address, speed);
+
+  if (!in_reset) {
+    now = millis();
+    int currentSpeed = readSpeedToUnits();
+    if (currentSpeed < dst_speed) {
+      roboclaw.BackwardM1(address, speed);
+      // make sure not to overflow
+      if ((int)speed + accel > 127) {
+        speed = 127;
+      } else {
+        speed += accel;
+      } 
+    } else if (currentSpeed > dst_speed) {
+      // decreases in speed should be instant
+      // this helps when we want to stop the motor
+      speed = dst_speed;
+      roboclaw.BackwardM1(address, speed);
+    }
+    accel = getAccel(); 
   }
-  accel = getAccel();
-  
 }
